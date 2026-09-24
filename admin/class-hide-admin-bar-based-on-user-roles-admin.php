@@ -179,11 +179,6 @@ class hab_Hide_Admin_Bar_Based_On_User_Roles_Admin {
 		}
 		?>
 		<?php
-			// Add the promotional banner here
-			if (!file_exists(WP_PLUGIN_DIR . '/hide-admin-bar-pro/hide-admin-bar-pro.php')) {
-				include plugin_dir_path(__FILE__) . 'partials/promotional-banner.php';
-			}
-			
 			// Add the review banner
 			include plugin_dir_path(__FILE__) . 'partials/review-banner.php';
 		?>
@@ -214,11 +209,6 @@ class hab_Hide_Admin_Bar_Based_On_User_Roles_Admin {
 							<a class="nav-link <?php echo $menu_active_class; ?>" id="hab-modules-tab" data-bs-toggle="tab" href="#hab-modules" role="tab" aria-controls="hab-modules" aria-selected="true"><?php esc_html_e( 'Settings', 'hide-admin-bar-based-on-user-roles' ); ?></a>
 						</li>
 
-						<?php if (!defined('HAB_PRO_VERSION')) { ?>
-						<li class="nav-item" role="presentation">
-							<a class="nav-link" id="pro-features-tab" data-bs-toggle="tab" href="#pro-features" role="tab" aria-controls="pro-features" aria-selected="false"><?php esc_html_e( 'Pro Features', 'hide-admin-bar-based-on-user-roles' ); ?> <span class="badge bg-warning text-dark">NEW</span></a>
-						</li>
-						<?php } ?>
 						<?php do_action('hab_admin_menu_tabs'); ?>
 
 						<li class="nav-item" role="presentation">
@@ -344,170 +334,6 @@ class hab_Hide_Admin_Bar_Based_On_User_Roles_Admin {
 							</div>
 						</div> <!-- WordPress Tab End --->
 						
-						<?php if (!defined('HAB_PRO_VERSION')) { ?>
-						<div class="tab-pane fade" id="pro-features" role="tabpanel" aria-labelledby="pro-features-tab">
-							<div class="row">
-								<div class="col-md-12 mt-4">
-									<div class="card1 w-100 border-primary">
-										<div class="card-header bg-primary text-white py-3 px-4 rounded-top">
-											<h3 class="m-0 fw-bold"><?php esc_html_e('Upgrade to Hide Admin Bar Pro', 'hide-admin-bar-based-on-user-roles'); ?></h3>
-										</div>
-										<div class="card-body">
-											<div class="row">
-												<div class="col-md-7">
-													<h4 class="mb-4 fw-bold position-relative py-2" style="color: #000000; border-bottom: 2px solid #000000; letter-spacing: 0.5px; text-shadow: 0 1px 1px rgba(0,0,0,0.1);"><?php esc_html_e('Take Complete Control of Your WordPress Admin Bar', 'hide-admin-bar-based-on-user-roles'); ?> <span class="position-absolute" style="width: 50px; height: 3px; background-color: #000000; bottom: -3px; left: 0;"></span></h4>
-													
-													<p class="lead" style="color: #000000;"><?php esc_html_e('The Pro version gives you powerful features to customize the admin bar experience for every user on your site.', 'hide-admin-bar-based-on-user-roles'); ?></p>
-													
-													<div class="feature-list mt-4">
-														<div class="feature-item d-flex align-items-start mb-4">
-															<div class="feature-icon me-3">
-																<span class="dashicons dashicons-admin-users" style="font-size: 24px; color: #000000;"></span>
-															</div>
-															<div class="feature-content">
-																<h5 style="color: #000000;"><?php esc_html_e('User-Specific Controls', 'hide-admin-bar-based-on-user-roles'); ?></h5>
-																<p><?php esc_html_e('Hide the admin bar for specific users by username, not just by role or capability.', 'hide-admin-bar-based-on-user-roles'); ?></p>
-															</div>
-														</div>
-														
-														<div class="feature-item d-flex align-items-start mb-4">
-															<div class="feature-icon me-3">
-																<span class="dashicons dashicons-admin-appearance" style="font-size: 24px; color: #000000;"></span>
-															</div>
-															<div class="feature-content">
-																<h5 style="color: #000000;"><?php esc_html_e('Page-Specific Controls', 'hide-admin-bar-based-on-user-roles'); ?></h5>
-																<p><?php esc_html_e('Show or hide the admin bar on specific pages, posts, or custom post types.', 'hide-admin-bar-based-on-user-roles'); ?></p>
-															</div>
-														</div>
-														
-														<div class="feature-item d-flex align-items-start mb-4">
-															<div class="feature-icon me-3">
-																<span class="dashicons dashicons-clock" style="font-size: 24px; color: #000000;"></span>
-															</div>
-															<div class="feature-content">
-																<h5 style="color: #000000;"><?php esc_html_e('Auto-Hide Timer', 'hide-admin-bar-based-on-user-roles'); ?></h5>
-																<p><?php esc_html_e('Set the admin bar to automatically hide after a specific time period of inactivity.', 'hide-admin-bar-based-on-user-roles'); ?></p>
-															</div>
-														</div>
-														
-														<div class="feature-item d-flex align-items-start mb-4">
-															<div class="feature-icon me-3">
-																<span class="dashicons dashicons-admin-customizer" style="font-size: 24px; color: #000000;"></span>
-															</div>
-															<div class="feature-content">
-																<h5 style="color: #000000;"><?php esc_html_e('Custom Admin Bar Items', 'hide-admin-bar-based-on-user-roles'); ?></h5>
-																<p><?php esc_html_e('Add, remove, or modify specific items in the admin bar for different user roles.', 'hide-admin-bar-based-on-user-roles'); ?></p>
-															</div>
-														</div>
-														
-														<div class="feature-item d-flex align-items-start mb-4">
-															<div class="feature-icon me-3">
-																<span class="dashicons dashicons-smartphone" style="font-size: 24px; color: #000000;"></span>
-															</div>
-															<div class="feature-content">
-																<h5 style="color: #000000;"><?php esc_html_e('Device-Specific Settings', 'hide-admin-bar-based-on-user-roles'); ?></h5>
-																<p><?php esc_html_e('Configure different admin bar behavior for desktop, tablet, and mobile devices.', 'hide-admin-bar-based-on-user-roles'); ?></p>
-															</div>
-														</div>
-														
-														<div class="feature-item d-flex align-items-start">
-															<div class="feature-icon me-3">
-																<span class="dashicons dashicons-shield" style="font-size: 24px; color: #000000;"></span>
-															</div>
-															<div class="feature-content">
-																<h5 style="color: #000000;"><?php esc_html_e('Priority Support', 'hide-admin-bar-based-on-user-roles'); ?></h5>
-																<p><?php esc_html_e('Get dedicated support from our team of WordPress experts.', 'hide-admin-bar-based-on-user-roles'); ?></p>
-															</div>
-														</div>
-													</div>
-													
-													<div class="cta-buttons mt-5">
-														<a href="https://pluginstack.dev/plugins/hide-admin-bar/pro" target="_blank" class="btn btn-primary btn-lg me-3"><?php esc_html_e('Upgrade to Pro', 'hide-admin-bar-based-on-user-roles'); ?></a>
-														<a href="https://pluginstack.dev/plugins/hide-admin-bar/pro" target="_blank" class="btn btn-outline-primary btn-lg"><?php esc_html_e('View Demo', 'hide-admin-bar-based-on-user-roles'); ?></a>
-													</div>
-												</div>
-												
-												<div class="col-md-5">
-													<div class="card bg-light mt-4">
-														<div class="card-body">
-															<h4 class="text-center mb-4" style="color: #000000;"><?php esc_html_e('Pro vs Free Comparison', 'hide-admin-bar-based-on-user-roles'); ?></h4>
-															
-															<table class="table">
-																<thead>
-																	<tr>
-																		<th style="color: #000000;"><?php esc_html_e('Feature', 'hide-admin-bar-based-on-user-roles'); ?></th>
-																		<th class="text-center" style="color: #000000;"><?php esc_html_e('Free', 'hide-admin-bar-based-on-user-roles'); ?></th>
-																		<th class="text-center" style="color: #000000;"><?php esc_html_e('Pro', 'hide-admin-bar-based-on-user-roles'); ?></th>
-																	</tr>
-																</thead>
-																<tbody>
-																	<tr>
-																		<td style="color: #000000;"><?php esc_html_e('Hide for All Users', 'hide-admin-bar-based-on-user-roles'); ?></td>
-																		<td class="text-center"><span class="dashicons dashicons-yes-alt text-success"></span></td>
-																		<td class="text-center"><span class="dashicons dashicons-yes-alt text-success"></span></td>
-																	</tr>
-																	<tr>
-																		<td style="color: #000000;"><?php esc_html_e('Role-Based Control', 'hide-admin-bar-based-on-user-roles'); ?></td>
-																		<td class="text-center"><span class="dashicons dashicons-yes-alt text-success"></span></td>
-																		<td class="text-center"><span class="dashicons dashicons-yes-alt text-success"></span></td>
-																	</tr>
-																	<tr>
-																		<td style="color: #000000;"><?php esc_html_e('Capability-Based Control', 'hide-admin-bar-based-on-user-roles'); ?></td>
-																		<td class="text-center"><span class="dashicons dashicons-yes-alt text-success"></span></td>
-																		<td class="text-center"><span class="dashicons dashicons-yes-alt text-success"></span></td>
-																	</tr>
-																	<tr>
-																		<td style="color: #000000;"><?php esc_html_e('Hide for Guests', 'hide-admin-bar-based-on-user-roles'); ?></td>
-																		<td class="text-center"><span class="dashicons dashicons-yes-alt text-success"></span></td>
-																		<td class="text-center"><span class="dashicons dashicons-yes-alt text-success"></span></td>
-																	</tr>
-																	<tr>
-																		<td style="color: #000000;"><?php esc_html_e('Time-Based Conditions', 'hide-admin-bar-based-on-user-roles'); ?></td>
-																		<td class="text-center"><span class="dashicons dashicons-no-alt text-danger"></span></td>
-																		<td class="text-center"><span class="dashicons dashicons-yes-alt text-success"></span></td>
-																	</tr>
-																	<tr>
-																		<td style="color: #000000;"><?php esc_html_e('User-Specific Control', 'hide-admin-bar-based-on-user-roles'); ?></td>
-																		<td class="text-center"><span class="dashicons dashicons-no-alt text-danger"></span></td>
-																		<td class="text-center"><span class="dashicons dashicons-yes-alt text-success"></span></td>
-																	</tr>
-																	<tr>
-																		<td style="color: #000000;"><?php esc_html_e('Page-Specific Control', 'hide-admin-bar-based-on-user-roles'); ?></td>
-																		<td class="text-center"><span class="dashicons dashicons-no-alt text-danger"></span></td>
-																		<td class="text-center"><span class="dashicons dashicons-yes-alt text-success"></span></td>
-																	</tr>
-																	<tr>
-																		<td style="color: #000000;"><?php esc_html_e('Device-Specific Settings', 'hide-admin-bar-based-on-user-roles'); ?></td>
-																		<td class="text-center"><span class="dashicons dashicons-no-alt text-danger"></span></td>
-																		<td class="text-center"><span class="dashicons dashicons-yes-alt text-success"></span></td>
-																	</tr>
-																	<tr>
-																		<td style="color: #000000;"><?php esc_html_e('Custom Admin Bar Items', 'hide-admin-bar-based-on-user-roles'); ?></td>
-																		<td class="text-center"><span class="dashicons dashicons-no-alt text-danger"></span></td>
-																		<td class="text-center"><span class="dashicons dashicons-yes-alt text-success"></span></td>
-																	</tr>
-																	<tr>
-																		<td style="color: #000000;"><?php esc_html_e('Priority Support', 'hide-admin-bar-based-on-user-roles'); ?></td>
-																		<td class="text-center"><span class="dashicons dashicons-no-alt text-danger"></span></td>
-																		<td class="text-center"><span class="dashicons dashicons-yes-alt text-success"></span></td>
-																	</tr>
-																</tbody>
-															</table>
-															
-															<div class="text-center mt-4">
-																<a href="https://pluginstack.dev/plugins/hide-admin-bar/pro" target="_blank" class="btn btn-success btn-lg w-100"><?php esc_html_e('Get Pro Now', 'hide-admin-bar-based-on-user-roles'); ?></a>
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<?php } ?>
-
 						<?php do_action('hab_admin_menu_tabs_content'); ?>
 
 						<div class="tab-pane fade" id="xwpstack" role="tabpanel" aria-labelledby="xwpstack-tab" style="display:none !important;">

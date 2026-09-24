@@ -134,25 +134,6 @@ if ( !function_exists( 'habbourp_fs' ) ) {
     }
 
     add_action( 'plugins_loaded', 'hab_run_hide_admin_bar_based_on_user_roles' );
-    // Function to handle promotional banner dismissal
-    function hab_dismiss_promotional_banner() {
-        check_ajax_referer( 'hab_dismiss_promo_nonce', 'nonce' );
-        $dismiss_type = ( isset( $_POST['dismiss_type'] ) ? sanitize_text_field( $_POST['dismiss_type'] ) : '' );
-        $user_id = get_current_user_id();
-        if ( $dismiss_type === 'permanent' ) {
-            update_user_meta( $user_id, 'hab_hide_promo_banner', 'permanent' );
-        } elseif ( $dismiss_type === '30days' ) {
-            $hide_until = time() + 30 * 24 * 60 * 60;
-            // 30 days from now
-            update_user_meta( $user_id, 'hab_hide_promo_until', $hide_until );
-        } else {
-            // For 'now' option, just update the timestamp to current time
-            update_user_meta( $user_id, 'hab_hide_promo_until', time() );
-        }
-        wp_send_json_success();
-    }
-
-    add_action( 'wp_ajax_hab_dismiss_promotional_banner', 'hab_dismiss_promotional_banner' );
     // Function to store the dismissed state using AJAX
     function custom_advertisement_dismiss_habou() {
         update_user_meta( get_current_user_id(), 'dismiss_custom_ad_habou', true );
