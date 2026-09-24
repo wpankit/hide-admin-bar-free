@@ -95,6 +95,13 @@ if ( !function_exists( 'habbourp_fs' ) ) {
     habbourp_fs()->add_filter( 'is_pricing_page_visible', '__return_false' );
     habbourp_fs()->add_filter( 'has_paid_plan_account', '__return_false' );
     habbourp_fs()->add_filter( 'show_trial', '__return_false' );
+    // Earlier versions could store a "Start free trial" notice, which Freemius keeps showing until it's
+    // dismissed. Clear it before Freemius checks for it on admin_init.
+    function hab_remove_trial_notice() {
+        habbourp_fs()->remove_sticky( 'trial_promotion' );
+    }
+
+    add_action( 'admin_init', 'hab_remove_trial_notice', 5 );
     /**
      * The code that runs during plugin activation.
      * This action is documented in includes/class-hide-admin-bar-based-on-user-roles-activator.php
