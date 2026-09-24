@@ -78,20 +78,7 @@ class hab_Hide_Admin_Bar_Based_On_User_Roles_Admin {
 		 */
 
 		if ( isset( $_GET['page'] ) && $_GET['page'] == 'hide-admin-bar-settings' ) {
-
-			wp_enqueue_style( 'select2-css', plugin_dir_url( __FILE__ ) . 'css/select2.min.css', array(), $this->version, 'all' );
-
-			wp_enqueue_style( 'ultimakit_bootstrap_main', plugin_dir_url( __FILE__ ) . 'css/bootstrap.min.css', array(), $this->version, 'all' );
-			wp_enqueue_style( 'ultimakit_bootstrap_rtl', plugin_dir_url( __FILE__ ) . 'css/bootstrap.rtl.min.css', array(), $this->version, 'all' );
-			// Enqueue toastr CSS.
-			wp_enqueue_style( 'toastr-css', plugin_dir_url( __FILE__ ) . 'css/toastr.min.css', array(), $this->version, 'all' );
-			
-			wp_enqueue_style('dashicons');
-                            
-			wp_enqueue_style( 'tagsinput-css', plugin_dir_url( __FILE__ ) . 'css/jquery.tagsinput.min.css', array(), $this->version, 'all' );
-			wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/main.css', array(), $this->version, 'all' );
-			wp_enqueue_style( $this->plugin_name.'-admin', plugin_dir_url( __FILE__ ) . 'css/hide-admin-bar-based-on-user-roles-admin.css', array(), $this->version, 'all' );
-			
+			wp_enqueue_style( $this->plugin_name . '-admin', plugin_dir_url( __FILE__ ) . 'css/hide-admin-bar-based-on-user-roles-admin.css', array( 'dashicons' ), $this->version, 'all' );
 		}
 
 	}
@@ -114,44 +101,22 @@ class hab_Hide_Admin_Bar_Based_On_User_Roles_Admin {
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
-		if ( isset( $_GET['page'] ) && ( $_GET['page'] == 'hide-admin-bar-settings' || $_GET['page'] == 'hide-admin-bar-settings-affiliation' || $_GET['page'] == 'hide-admin-bar-settings-account' || $_GET['page'] == 'hide-admin-bar-settings-contact' ) ) {
-			
-			wp_enqueue_script( 'jquery' );
-			wp_enqueue_script( 'ultimakit_bootstrap_bundle', plugin_dir_url( __FILE__ ) . 'js/bootstrap.bundle.min.js', array( 'jquery' ), $this->version, false );
-			// Enqueue toastr.js.
-			wp_enqueue_script( 'toastr-js', plugin_dir_url( __FILE__ ) . 'js/toastr.min.js', array( 'jquery' ), $this->version, true );
-
-			wp_enqueue_script( 'tagsinput-js', plugin_dir_url( __FILE__ ) . 'js/jquery.tagsinput.min.js', array( 'jquery' ), $this->version, false );
-
-			wp_enqueue_script(
-				'silent-installer', 
-				plugin_dir_url(__FILE__) . 'js/silent-installer.js', 
-				array('jquery'), 
-				'1.0', 
-				true
-			);
-			
-			wp_localize_script('silent-installer', 'silent_installer_vars', array(
-				'ajaxurl' => admin_url('admin-ajax.php'),
-				'nonce' => wp_create_nonce('silent_installer'),
-				'installing_text' => __('Installing...', 'hide-admin-bar-based-on-user-roles'),
-				'activated_text' => __('Installed & Activated!', 'hide-admin-bar-based-on-user-roles'),
-				'error_text' => __('Installation Failed', 'hide-admin-bar-based-on-user-roles'),
-				'already_installed' => __('Already Installed & Active', 'hide-admin-bar-based-on-user-roles'),
-				'checking_status' => __('Checking plugin status...', 'hide-admin-bar-based-on-user-roles'),
-				'downloading' => __('Downloading plugin...', 'hide-admin-bar-based-on-user-roles'),
-				'installing' => __('Installing plugin...', 'hide-admin-bar-based-on-user-roles'),
-				'activating' => __('Activating plugin...', 'hide-admin-bar-based-on-user-roles')
-			));
-
-			wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/hide-admin-bar-based-on-user-roles-admin.js', array( 'jquery' ), $this->version, false );
+		if ( isset( $_GET['page'] ) && $_GET['page'] == 'hide-admin-bar-settings' ) {
+			wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/hide-admin-bar-based-on-user-roles-admin.js', array( 'jquery' ), $this->version, true );
 			$args = array(
-				'url'       => admin_url( 'admin-ajax.php' ),
-				'hba_nonce' => wp_create_nonce( 'hba-nonce' ),
+				'url'          => admin_url( 'admin-ajax.php' ),
+				'hba_nonce'    => wp_create_nonce( 'hba-nonce' ),
+				'review_nonce' => wp_create_nonce( 'hab_dismiss_review_nonce' ),
+				'i18n'         => array(
+					'saving'           => __( 'Saving…', 'hide-admin-bar-based-on-user-roles' ),
+					'saved'            => __( 'Settings saved.', 'hide-admin-bar-based-on-user-roles' ),
+					'error'            => __( 'The settings couldn’t be saved. Reload the page and try again.', 'hide-admin-bar-based-on-user-roles' ),
+					/* translators: %s: capability name. */
+					'removeCapability' => __( 'Remove %s', 'hide-admin-bar-based-on-user-roles' ),
+					'confirmReset'     => __( 'Reset all Hide Admin Bar settings? The admin bar will show again for everyone.', 'hide-admin-bar-based-on-user-roles' ),
+				),
 			);
 			wp_localize_script( $this->plugin_name, 'ajaxVar', $args );
-
-			
 		}
 
 
@@ -177,169 +142,28 @@ class hab_Hide_Admin_Bar_Based_On_User_Roles_Admin {
 			update_option( "hab_reset_key", rand( 0, 999999999 ) );
 			echo '<script>window.location.reload();</script>';
 		}
-		?>
-		<?php
-			// Add the review banner
-			include plugin_dir_path(__FILE__) . 'partials/review-banner.php';
-		?>
-		<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #6610F2;">
-			<div class="container-fluid p-2">
-				<a class="navbar-brand" href="#">
-					<img src="<?php echo esc_url( plugin_dir_url( __FILE__ ).'images/hide-admin-bar-logo.svg' ); ?>"  class="d-inline-block align-top" alt="hide-admin-bar-based-on-user-roles-logo" width="225px">
-					<div class="wpuk-version-info"><?php esc_html_e( 'Current version: ', 'hide-admin-bar-based-on-user-roles' ); ?><?php echo HIDE_ADMIN_BAR_BASED_ON_USER_ROLES; ?></div>
-				</a>
-				
-				<div class="navbar-nav ml-auto">
-					<a class="nav-item nav-link" target="_blank" href="https://wordpress.org/support/plugin/hide-admin-bar-based-on-user-roles/reviews/#new-post" style="color: #ffffff; margin-right: 20px"><?php esc_html_e( 'Leave Feedback', 'hide-admin-bar-based-on-user-roles' ); ?></a>
-				</div>
-			</div>
-		</nav>
 
-		<div class="wrap">
-			<div class="container-fluid module-container">
-				
-				<div class="row">
-					<?php
-						$menu_active_class = '';
-						$menu_active_class = 'active show';
-					?>
-					<!-- Nav tabs -->
-					<ul class="nav nav-tabs" id="wpukTabs" role="tablist">
-						<li class="nav-item" role="presentation">
-							<a class="nav-link <?php echo $menu_active_class; ?>" id="hab-modules-tab" data-bs-toggle="tab" href="#hab-modules" role="tab" aria-controls="hab-modules" aria-selected="true"><?php esc_html_e( 'Settings', 'hide-admin-bar-based-on-user-roles' ); ?></a>
-						</li>
+		// hab_settings is an empty string until the first save and after a reset.
+		$settings = is_array( $settings ) ? $settings : array();
 
-						<?php do_action('hab_admin_menu_tabs'); ?>
-					</ul>
-					<!-- Tab panes -->
-					<div class="tab-content" id="wpukTabsContent">
-						<div class="tab-pane fade show <?php echo $menu_active_class; ?>" id="hab-modules" role="tabpanel" aria-labelledby="modules-tab">
-							<div class="row">
-								<form class="form-sample">
-									<div class="row">
-										<div class="col-md-12">
-											<div class="form-group row">
-												<label class="col-sm-6 col-form-label"><?php esc_html_e( 'Hide Admin Bar for All Users', 'hide-admin-bar-based-on-user-roles' ); ?></label>
-												<div class="col-sm-6">
-													<?php
-													$disableForAll = ( isset( $settings["hab_disableforall"] ) ) ? $settings["hab_disableforall"] : "";
-													$checked       = ( $disableForAll == 'yes' ) ? "checked" : "";
-													echo '<div class="icheck-square">
-															<input tabindex="5" ' . $checked . ' type="checkbox" id="hide_for_all">
-														</div>';
-													?>
-												</div>
-											</div>
-										</div>
-									</div>
-									<?php if ( $disableForAll == "no" || empty( $disableForAll ) ) { ?>
-										<div class="row mt-3">
-											<div class="col-md-12">
-												<div class="form-group row">
-													<label class="col-sm-6 col-form-label"><?php esc_html_e( 'Hide Admin Bar for All Guests Users', 'hide-admin-bar-based-on-user-roles' ); ?></label>
-													<div class="col-sm-6">
-														<?php
-														$disableForAllGuests = ( isset( $settings["hab_disableforallGuests"] ) ) ? $settings["hab_disableforallGuests"] : "";
-														$checkedGuests       = ( $disableForAllGuests == 'yes' ) ? "checked" : "";
-														echo '<div class="icheck-square">
-															<input tabindex="5" ' . $checkedGuests . ' type="checkbox" id="hide_for_all_guests">
-														</div>';
-														?>
+		$hide_for_all    = isset( $settings['hab_disableforall'] ) && 'yes' === $settings['hab_disableforall'];
+		$hide_for_guests = isset( $settings['hab_disableforallGuests'] ) && 'yes' === $settings['hab_disableforallGuests'];
+		$selected_roles  = ( isset( $settings['hab_userRoles'] ) && is_array( $settings['hab_userRoles'] ) ) ? $settings['hab_userRoles'] : array();
+		$capabilities    = array();
+		if ( isset( $settings['hab_capabilities'] ) && is_string( $settings['hab_capabilities'] ) ) {
+			$capabilities = array_values( array_unique( array_filter( array_map( 'trim', explode( ',', $settings['hab_capabilities'] ) ), 'strlen' ) ) );
+		}
+		$roles     = wp_roles()->get_names();
+		$reset_url = empty( $hab_reset_key ) ? '' : add_query_arg(
+			array(
+				'page'         => 'hide-admin-bar-settings',
+				'reset_plugin' => $hab_reset_key,
+			),
+			admin_url( 'options-general.php' )
+		);
 
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="row mt-3">
-											<div class="col-md-12">
-												<div class="form-group row">
-													<label class="col-sm-6 col-form-label"><?php esc_html_e( 'User Roles', 'hide-admin-bar-based-on-user-roles' ); ?>
-														<br/><br/><?php esc_html_e( 'Hide admin bar for selected user roles.', 'hide-admin-bar-based-on-user-roles' ); ?>
-													</label>
-													<div class="col-sm-6">
-														<?php
-														global $wp_roles;
-														$exRoles = ( isset( $settings["hab_userRoles"] ) ) ? $settings["hab_userRoles"] : "";
-														$checked = '';
+		include plugin_dir_path( __FILE__ ) . 'partials/hide-admin-bar-based-on-user-roles-admin-display.php';
 
-														$roles = $wp_roles->get_names();
-														if ( is_array( $roles ) ) {
-															foreach ( $roles as $key => $value ):
-																if ( is_array( $exRoles ) ) {
-																	$checked = ( in_array( $key, $exRoles ) ) ? "checked" : "";
-																}
-
-																echo '<div class="icheck-square">
-																<input name="userRoles[]" ' . $checked . ' tabindex="5" type="checkbox" value="' . $key . '">&nbsp;&nbsp;' . $value . '
-															</div>';
-															endforeach;
-														}
-														?>
-
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="row mt-3">
-											<div class="col-md-12">
-												<div class="form-group row">
-													<label class="col-sm-6 col-form-label"><?php esc_html_e( 'Capabilities Blacklist', 'hide-admin-bar-based-on-user-roles' );
-														echo '<br />';
-														esc_html_e( 'Hide admin bar for selected user capabilities', 'hide-admin-bar-based-on-user-roles' ); ?></label>
-													<div class="col-sm-6">
-														<?php
-														$caps = ( isset( $settings["hab_capabilities"] ) ) ? $settings["hab_capabilities"] : "";
-														?>
-														<div class="icheck-square">
-															<textarea name="hab_capabilities"
-																	id="hab_capabilities" rows="5" cols="50"><?php echo $caps; ?></textarea>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-									<?php } ?>
-									<div class="row mt-3">
-										<div class="col-md-12">
-											<button type="button" class="btn btn-primary btn-fw"
-													id="submit_roles"><?php esc_html_e( "Save Changes", 'hide-admin-bar-based-on-user-roles' ); ?></button>
-										</div>
-										<div class="col-md-12">
-											<br/>
-											<p><?php esc_html_e( "You can reset plugin settings by visiting this url without login to admin panel. Keep it safe.", 'hide-admin-bar-based-on-user-roles' ); ?>
-												<br/><a href="<?php echo admin_url() . "options-general.php?page=hide-admin-bar-settings&reset_plugin=" . $hab_reset_key; ?>"
-														target="_blank"><?php echo admin_url() . "options-general.php?page=hide-admin-bar-settings&reset_plugin=" . $hab_reset_key; ?></a>
-											</p>
-										</div>
-									</div>
-								</form>
-								<script>
-									if (jQuery('#hab_capabilities').length) {
-										jQuery('#hab_capabilities').tagsInput({
-											'width': '100%',
-											'height': '75%',
-											'interactive': true,
-											'defaultText': '<?php _e('Add More', 'hide-admin-bar-based-on-user-roles'); ?>',
-											'removeWithBackspace': true,
-											'minChars': 0,
-											'maxChars': 20, // if not provided there is no limit
-											'placeholderColor': '#666666'
-										});
-									}
-								</script>
-							</div>
-						</div> <!-- WordPress Tab End --->
-						
-						<?php do_action('hab_admin_menu_tabs_content'); ?>
-
-					</div>
-					<!-- Duplicate the above block for each module you have -->
-				</div>
-				<?php include plugin_dir_path(__FILE__) . 'partials/other-plugins.php'; ?>
-			</div>
-		</div>
-
-		<?php
 	}
 
 	public function save_user_roles() {
