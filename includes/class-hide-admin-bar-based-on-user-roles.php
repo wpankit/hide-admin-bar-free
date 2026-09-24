@@ -6,7 +6,7 @@
  * A class definition that includes attributes and functions used across both the
  * public-facing side of the site and the admin area.
  *
- * @link       https://pluginstack.dev/
+ * @link       https://wpankit.com/
  * @since      1.7.0
  *
  * @package    hab_Hide_Admin_Bar_Based_On_User_Roles
@@ -25,7 +25,7 @@
  * @since      1.7.0
  * @package    hab_Hide_Admin_Bar_Based_On_User_Roles
  * @subpackage hab_Hide_Admin_Bar_Based_On_User_Roles/includes
- * @author     Ankit Panchal <support@pluginstack.dev>
+ * @author     Ankit Panchal
  */
 class hab_Hide_Admin_Bar_Based_On_User_Roles {
 

@@ -2,8 +2,8 @@
 Contributors: ankitmaru, siapanchal
 Tags: hide admin bar, admin bar, toolbar, user roles, remove admin bar
 Plugin URI: https://wordpress.org/plugins/hide-admin-bar-based-on-user-roles/
-Author: PluginStackDev
-Author URI: https://pluginstack.dev
+Author: WPAnkit
+Author URI: https://wpankit.com/
 Requires at least: 5.5
 Tested up to: 7.1
 Requires PHP: 5.6
