@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Hide Admin Bar banner</title>
+<style>
+/* FONTS: build-assets.mjs injects the Inter and Manrope @font-face rules here. */
+
+:root {
+	--purple: #6610f2;
+	--deep: #4a0bc0;
+	--gold: #ffc21a;
+	--ink: #1d2327;
+	--muted: #8c8f94;
+	--soft: #f4edff;
+}
+
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+html,
+body {
+	width: 772px;
+	height: 250px;
+	overflow: hidden;
+}
+
+body {
+	position: relative;
+	font-family: Inter, sans-serif;
+	color: #fff;
+	background:
+		radial-gradient(circle at 8% 12%, rgba(255, 255, 255, 0.16), transparent 38%),
+		radial-gradient(circle at 96% 100%, rgba(255, 194, 26, 0.28), transparent 42%),
+		linear-gradient(135deg, #7b2ff7 0%, #6610f2 48%, #4a0bc0 100%);
+}
+
+/* Copy ------------------------------------------------------------- */
+
+.copy {
+	position: absolute;
+	top: 38px;
+	left: 44px;
+	width: 350px;
+}
+
+.brand {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+}
+
+.brand img {
+	width: 58px;
+	height: 58px;
+	border-radius: 14px;
+	box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.9), 0 10px 24px rgba(30, 0, 80, 0.35);
+}
+
+h1 {
+	font-family: Manrope, Inter, sans-serif;
+	font-size: 36px;
+	font-weight: 800;
+	line-height: 1.02;
+	letter-spacing: -0.02em;
+}
+
+.tagline {
+	margin-top: 16px;
+	font-size: 16px;
+	font-weight: 500;
+	line-height: 1.45;
+	color: rgba(255, 255, 255, 0.9);
+}
+
+.chips {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin-top: 16px;
+}
+
+.chip {
+	padding: 6px 11px;
+	border: 1px solid rgba(255, 255, 255, 0.24);
+	border-radius: 999px;
+	background: rgba(255, 255, 255, 0.14);
+	font-size: 12px;
+	font-weight: 600;
+	line-height: 1;
+}
+
+.chip.free {
+	border-color: var(--gold);
+	background: var(--gold);
+	color: #3d0a94;
+}
+
+/* Illustration: a site whose admin bar is gone, and the rules panel. ---- */
+
+.site {
+	position: absolute;
+	top: 30px;
+	left: 470px;
+	width: 270px;
+	height: 190px;
+	overflow: hidden;
+	border-radius: 12px;
+	background: #fff;
+	box-shadow: 0 20px 44px rgba(30, 0, 80, 0.38);
+}
+
+.site-chrome {
+	display: flex;
+	align-items: center;
+	gap: 5px;
+	height: 20px;
+	padding: 0 10px;
+	background: #f0f0f1;
+}
+
+.site-chrome i {
+	width: 6px;
+	height: 6px;
+	border-radius: 50%;
+	background: #c3c4c7;
+}
+
+.hidden-bar {
+	height: 16px;
+	margin: 8px 10px 0;
+	border: 1.5px dashed #d0c3f5;
+	border-radius: 5px;
+}
+
+.site-body {
+	padding: 12px 14px;
+}
+
+.hero {
+	height: 58px;
+	border-radius: 8px;
+	background: linear-gradient(120deg, #efe6ff, #fdf3d6);
+}
+
+.line {
+	height: 7px;
+	margin-top: 10px;
+	border-radius: 4px;
+	background: #ececf0;
+}
+
+.line.short {
+	width: 60%;
+}
+
+.badge {
+	position: absolute;
+	top: 14px;
+	left: 706px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 44px;
+	height: 44px;
+	border-radius: 50%;
+	background: var(--gold);
+	box-shadow: 0 8px 18px rgba(30, 0, 80, 0.35);
+}
+
+.panel {
+	position: absolute;
+	top: 108px;
+	left: 414px;
+	width: 196px;
+	padding: 12px 12px 6px;
+	border-radius: 12px;
+	background: #fff;
+	color: var(--ink);
+	box-shadow: 0 16px 36px rgba(30, 0, 80, 0.4);
+}
+
+.panel-title {
+	margin-bottom: 6px;
+	font-size: 11px;
+	font-weight: 700;
+	color: #50575e;
+	letter-spacing: 0.02em;
+	text-transform: uppercase;
+}
+
+.row {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 6px 0;
+	border-top: 1px solid #f0f0f1;
+	font-size: 12px;
+	font-weight: 600;
+}
+
+.row:first-of-type {
+	border-top: 0;
+}
+
+.switch {
+	position: relative;
+	width: 28px;
+	height: 16px;
+	border-radius: 999px;
+	background: #c3c4c7;
+}
+
+.switch::after {
+	content: "";
+	position: absolute;
+	top: 2px;
+	left: 2px;
+	width: 12px;
+	height: 12px;
+	border-radius: 50%;
+	background: #fff;
+}
+
+.switch.on {
+	background: var(--purple);
+}
+
+.switch.on::after {
+	left: 14px;
+}
+</style>
+</head>
+<body>
+	<div class="copy">
+		<div class="brand">
+			<img src="ICON_URI" alt="">
+			<h1>Hide Admin Bar</h1>
+		</div>
+		<p class="tagline">Choose who sees the WordPress admin bar: by role, by capability or for everyone.</p>
+		<div class="chips">
+			<span class="chip free">100% free</span>
+			<span class="chip">Any theme</span>
+			<span class="chip">Multisite ready</span>
+		</div>
+	</div>
+
+	<div class="site">
+		<div class="site-chrome"><i></i><i></i><i></i></div>
+		<div class="hidden-bar"></div>
+		<div class="site-body">
+			<div class="hero"></div>
+			<div class="line"></div>
+			<div class="line short"></div>
+		</div>
+	</div>
+
+	<div class="badge">
+		<svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
+			<path d="M3 13C6.5 7.5 19.5 7.5 23 13C19.5 18.5 6.5 18.5 3 13Z" fill="none" stroke="#4a0bc0" stroke-width="2.4" stroke-linejoin="round"/>
+			<circle cx="13" cy="13" r="3.2" fill="#4a0bc0"/>
+			<line x1="5.5" y1="4.5" x2="20.5" y2="21.5" stroke="#ffc21a" stroke-width="5" stroke-linecap="round"/>
+			<line x1="5.5" y1="4.5" x2="20.5" y2="21.5" stroke="#4a0bc0" stroke-width="2.4" stroke-linecap="round"/>
+		</svg>
+	</div>
+
+	<div class="panel">
+		<div class="panel-title">Hide the admin bar for</div>
+		<div class="row"><span>Subscribers</span><span class="switch on"></span></div>
+		<div class="row"><span>Customers</span><span class="switch on"></span></div>
+		<div class="row"><span>Administrators</span><span class="switch"></span></div>
+	</div>
+</body>
+</html>
