@@ -47,10 +47,11 @@
 		function addCapabilities( text ) {
 			var existing = capabilities();
 
+			// Plain String/Array methods: jQuery 4 drops $.trim().
 			$.each( text.split( ',' ), function ( i, capability ) {
-				capability = $.trim( capability );
+				capability = capability.trim();
 
-				if ( capability && -1 === $.inArray( capability, existing ) ) {
+				if ( capability && -1 === existing.indexOf( capability ) ) {
 					existing.push( capability );
 					$tagList.append( tag( capability ) );
 				}
