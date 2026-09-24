@@ -10,12 +10,14 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
+// Links carry no tracking parameters: wp.org guideline 11 does not allow tracking referrals from admin ads.
 $hab_other_plugins = array(
     array(
         'name'        => 'Page Visit Counter',
         'tagline'     => __( 'Privacy-first analytics inside WordPress', 'hide-admin-bar-based-on-user-roles' ),
         'description' => __( 'See visitors and page views right in your dashboard, with no cookies and no external scripts.', 'hide-admin-bar-based-on-user-roles' ),
         'url'         => 'https://pagevisitcounter.com/',
+        'cta'         => __( 'Learn more', 'hide-admin-bar-based-on-user-roles' ),
         'icon'        => 'page-visit-counter-icon.svg',
     ),
     array(
@@ -23,29 +25,39 @@ $hab_other_plugins = array(
         'tagline'     => __( 'Keep Google Sheets in sync with WordPress', 'hide-admin-bar-based-on-user-roles' ),
         'description' => __( 'Send posts, users, form entries and WooCommerce orders to any spreadsheet.', 'hide-admin-bar-based-on-user-roles' ),
         'url'         => 'https://getpushrow.com/',
+        'cta'         => __( 'Learn more', 'hide-admin-bar-based-on-user-roles' ),
         'icon'        => 'pushrow-icon.svg',
     ),
-);
-
-// Lets the product sites attribute visits to this banner.
-$hab_other_plugins_utm = array(
-    'utm_source'   => 'hide-admin-bar',
-    'utm_medium'   => 'settings_page',
-    'utm_campaign' => 'other_plugins',
+    array(
+        'name'        => 'UltimaKit',
+        'tagline'     => __( 'Admin tools, security and performance in one plugin', 'hide-admin-bar-based-on-user-roles' ),
+        'description' => __( 'Replace 50+ single-purpose plugins with one modular toolkit.', 'hide-admin-bar-based-on-user-roles' ),
+        'url'         => 'https://wordpress.org/plugins/ultimakit-for-wp/',
+        'cta'         => __( 'View on WordPress.org', 'hide-admin-bar-based-on-user-roles' ),
+        'icon'        => 'ultimakit-icon.png',
+    ),
+    array(
+        'name'        => 'Disable Block Editor FullScreen mode',
+        'tagline'     => __( 'Open the block editor without fullscreen mode', 'hide-admin-bar-based-on-user-roles' ),
+        'description' => __( 'Lightweight and needs no settings: activate it and it works.', 'hide-admin-bar-based-on-user-roles' ),
+        'url'         => 'https://wordpress.org/plugins/disable-block-editor-fullscreen-mode/',
+        'cta'         => __( 'View on WordPress.org', 'hide-admin-bar-based-on-user-roles' ),
+        'icon'        => 'disable-block-editor-fullscreen-mode-icon.png',
+    ),
 );
 ?>
 <div class="hab-other-plugins">
     <h2 class="hab-other-plugins-title"><?php esc_html_e( 'More plugins from the makers of Hide Admin Bar', 'hide-admin-bar-based-on-user-roles' ); ?></h2>
     <div class="hab-other-plugins-grid">
         <?php foreach ( $hab_other_plugins as $hab_other_plugin ) : ?>
-            <a class="hab-other-plugins-card" href="<?php echo esc_url( add_query_arg( $hab_other_plugins_utm, $hab_other_plugin['url'] ) ); ?>" target="_blank" rel="noopener noreferrer">
+            <a class="hab-other-plugins-card" href="<?php echo esc_url( $hab_other_plugin['url'] ); ?>" target="_blank" rel="noopener noreferrer">
                 <img class="hab-other-plugins-icon" src="<?php echo esc_url( plugin_dir_url( __DIR__ ) . 'images/' . $hab_other_plugin['icon'] ); ?>" width="48" height="48" alt="">
                 <span class="hab-other-plugins-text">
                     <span class="hab-other-plugins-name"><?php echo esc_html( $hab_other_plugin['name'] ); ?></span>
                     <span class="hab-other-plugins-tagline"><?php echo esc_html( $hab_other_plugin['tagline'] ); ?></span>
                     <span class="hab-other-plugins-description"><?php echo esc_html( $hab_other_plugin['description'] ); ?></span>
                     <span class="hab-other-plugins-cta">
-                        <?php esc_html_e( 'Learn more', 'hide-admin-bar-based-on-user-roles' ); ?> <span aria-hidden="true">&rarr;</span>
+                        <?php echo esc_html( $hab_other_plugin['cta'] ); ?> <span aria-hidden="true">&rarr;</span>
                         <span class="screen-reader-text"><?php esc_html_e( '(opens in a new tab)', 'hide-admin-bar-based-on-user-roles' ); ?></span>
                     </span>
                 </span>
@@ -69,8 +81,14 @@ $hab_other_plugins_utm = array(
 
 .hab-other-plugins-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 16px;
+}
+
+@media screen and (max-width: 782px) {
+    .hab-other-plugins-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
 }
 
 .hab-other-plugins-card {
