@@ -72,6 +72,7 @@ if ( !function_exists( 'habbourp_fs' ) ) {
                 'menu'             => array(
                     'slug'    => 'hide-admin-bar-settings',
                     'support' => false,
+                    'contact' => false,
                     'pricing' => false,
                     'network' => true,
                     'parent'  => array(
