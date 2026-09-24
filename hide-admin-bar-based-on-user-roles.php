@@ -67,11 +67,12 @@ if ( !function_exists( 'habbourp_fs' ) ) {
                 'is_premium'       => false,
                 'premium_suffix'   => 'Pro',
                 'has_addons'       => false,
-                'has_paid_plans'   => true,
-                'has_affiliation'  => 'selected',
+                'has_paid_plans'   => false,
+                'has_affiliation'  => false,
                 'menu'             => array(
                     'slug'    => 'hide-admin-bar-settings',
                     'support' => false,
+                    'pricing' => false,
                     'network' => true,
                     'parent'  => array(
                         'slug' => 'options-general.php',
@@ -88,11 +89,11 @@ if ( !function_exists( 'habbourp_fs' ) ) {
     habbourp_fs();
     // Signal that SDK was initiated.
     do_action( 'habbourp_fs_loaded' );
-    if ( !defined( 'HAB_PRO_VERSION' ) ) {
-        if ( function_exists( 'habbourp_fs' ) && habbourp_fs()->can_use_premium_code() ) {
-            define( 'HAB_PRO_VERSION', true );
-        }
-    }
+    // The plugin is completely free. Sites that opted in earlier can still have the old paid plans
+    // cached by Freemius, so switch off every pricing, upgrade and trial prompt explicitly.
+    habbourp_fs()->add_filter( 'is_pricing_page_visible', '__return_false' );
+    habbourp_fs()->add_filter( 'has_paid_plan_account', '__return_false' );
+    habbourp_fs()->add_filter( 'show_trial', '__return_false' );
     /**
      * The code that runs during plugin activation.
      * This action is documented in includes/class-hide-admin-bar-based-on-user-roles-activator.php
@@ -118,13 +119,6 @@ if ( !function_exists( 'habbourp_fs' ) ) {
      * admin-specific hooks, and public-facing site hooks.
      */
     require plugin_dir_path( __FILE__ ) . 'includes/class-hide-admin-bar-based-on-user-roles.php';
-    // If Pro is active and the loader exists, load Pro loader
-    if ( function_exists( 'habbourp_fs' ) && habbourp_fs()->can_use_premium_code() ) {
-        $pro_loader = plugin_dir_path( __FILE__ ) . 'pro/class-pro-loader.php';
-        if ( file_exists( $pro_loader ) ) {
-            require_once $pro_loader;
-        }
-    }
     /**
      * Begins execution of the plugin.
      *
