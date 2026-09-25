@@ -1,22 +1,16 @@
 # wordpress.org listing assets
 
-Listing assets for **Hide Admin Bar Based on User Roles** on wordpress.org. They are
-not part of the plugin: `.gitattributes` marks this folder `export-ignore`, so
-`git archive` leaves it out of the release ZIP.
+The icon, banners and screenshots for **Hide Admin Bar Based on User Roles** on
+wordpress.org live in [`.wordpress-org/`](../../.wordpress-org). This folder holds what
+builds them. Neither folder is part of the plugin: `.gitattributes` marks both
+`export-ignore`, so they never reach the plugin zip.
 
-## Where these go
+## How they reach wordpress.org
 
 wordpress.org serves listing assets from the **`/assets/` directory of the SVN
-repository**, not from `trunk/` or a tag:
-
-```
-<svn-root>/
-  assets/        <- the upload set below goes here
-  trunk/         <- the plugin itself
-  tags/
-```
-
-## Upload set
+repository**, not from `trunk/` or a tag. The **Deploy to WordPress.org** workflow copies
+`.wordpress-org/` there with every release, and **Update readme and assets on
+WordPress.org** does it between releases, so `.wordpress-org/` must hold only these files:
 
 | File | Size | Used for |
 | --- | --- | --- |
@@ -26,18 +20,14 @@ repository**, not from `trunk/` or a tag:
 | `icon-256x256.png`, `icon-128x128.png` | | Icon fallbacks (required with an SVG icon) |
 | `screenshot-1.png`, `screenshot-2.png` | | Screenshots; captions come from `== Screenshots ==` in `README.txt` |
 
-Upload only these files. `source/` holds the banner HTML the PNGs are made from.
-The previous SVN `assets/` held a 1 MB `icon.svg` and an older `screenshot-1.png`;
-both are replaced by the files above.
-
 ## Regenerating
 
 ```bash
-node .wordpress-org/build-assets.mjs                # icon PNGs and banners
-node .wordpress-org/build-assets.mjs --screenshots  # also the screenshots
+node tools/wporg-assets/build-assets.mjs                # icon PNGs and banners
+node tools/wporg-assets/build-assets.mjs --screenshots  # also the screenshots
 ```
 
-Edit the copy and colours in `source/banner.html`, and the icon in `icon.svg`.
+Edit the copy and colours in `banner.html`, and the icon in `.wordpress-org/icon.svg`.
 The script renders every PNG in headless Chrome at the exact size wordpress.org
 expects and checks each file's dimensions. The icon also ships inside the plugin
 as `admin/images/hab-icon.svg` (the settings page header); keep the two copies

@@ -1,0 +1,44 @@
+{
+	"name": "wpankit/hide-admin-bar-based-on-user-roles",
+	"description": "Hide the WordPress admin bar for specific user roles, capabilities or guests.",
+	"type": "wordpress-plugin",
+	"license": "GPL-2.0-or-later",
+	"homepage": "https://wordpress.org/plugins/hide-admin-bar-based-on-user-roles/",
+	"authors": [
+		{
+			"name": "WPAnkit",
+			"homepage": "https://wpankit.com/"
+		}
+	],
+	"support": {
+		"issues": "https://github.com/wpankit/hide-admin-bar-free/issues",
+		"forum": "https://wordpress.org/support/plugin/hide-admin-bar-based-on-user-roles/",
+		"source": "https://github.com/wpankit/hide-admin-bar-free",
+		"security": "https://github.com/wpankit/hide-admin-bar-free/security/policy"
+	},
+	"require": {
+		"php": ">=5.6"
+	},
+	"require-dev": {
+		"dealerdirect/phpcodesniffer-composer-installer": "^1.0",
+		"phpcompatibility/phpcompatibility-wp": "^2.1",
+		"wp-coding-standards/wpcs": "^3.1"
+	},
+	"config": {
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		},
+		"platform": {
+			"php": "5.6"
+		},
+		"sort-packages": true
+	},
+	"scripts": {
+		"lint": "phpcs",
+		"format": "phpcbf"
+	},
+	"scripts-descriptions": {
+		"lint": "Check the code against the WordPress coding standards and PHP 5.6+ compatibility.",
+		"format": "Fix the coding standards issues that can be fixed automatically."
+	}
+}

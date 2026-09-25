@@ -1,11 +1,13 @@
 /**
  * Builds the wordpress.org listing assets for Hide Admin Bar Based on User Roles.
  *
- *   node .wordpress-org/build-assets.mjs                 icon PNGs and banners
- *   node .wordpress-org/build-assets.mjs --screenshots   also the settings page screenshots
+ *   node tools/wporg-assets/build-assets.mjs                 icon PNGs and banners
+ *   node tools/wporg-assets/build-assets.mjs --screenshots   also the settings page screenshots
  *
- * The icon PNGs come from icon.svg and the banners from source/banner.html, rendered in
- * headless Chrome at the exact sizes wordpress.org expects. Screenshots are taken from
+ * Everything is written to .wordpress-org/ (or HAB_ASSETS_DIR), which the deploy
+ * workflow copies to the plugin's assets/ folder on wordpress.org. The icon PNGs come
+ * from .wordpress-org/icon.svg and the banners from banner.html in this folder, rendered
+ * in headless Chrome at the exact sizes wordpress.org expects. Screenshots are taken from
  * the plugin's settings page on a local WordPress site, signed in through a short-lived
  * WP-CLI session that is destroyed afterwards; nothing is saved on the site.
  *
@@ -22,6 +24,7 @@ import { homedir } from 'node:os';
 import { fileURLToPath } from 'node:url';
 
 const HERE = dirname( fileURLToPath( import.meta.url ) );
+const OUT = process.env.HAB_ASSETS_DIR || join( HERE, '../../.wordpress-org' );
 const CHROME = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const QA = process.env.HAB_QA_DIR ||
 	join( homedir(), 'Local Sites/pushrow-lp/app/public/wp-content/themes/wpankit-product/tools/qa' );
@@ -53,7 +56,7 @@ const FONTS = [
 	font( 'Manrope', 'manrope', 800 ),
 ].join( '\n' );
 
-const iconSvg = readFileSync( join( HERE, 'icon.svg' ), 'utf8' );
+const iconSvg = readFileSync( join( OUT, 'icon.svg' ), 'utf8' );
 const iconUri = 'data:image/svg+xml;base64,' + Buffer.from( iconSvg ).toString( 'base64' );
 
 // Width and height from the PNG header, to check every output.
@@ -63,7 +66,7 @@ function pngSize( file ) {
 }
 
 function check( name, width, height ) {
-	const file = join( HERE, name );
+	const file = join( OUT, name );
 	const [ w, h ] = pngSize( file );
 	if ( w !== width || h !== height ) {
 		throw new Error( `${ name } is ${ w }x${ h }, expected ${ width }x${ height }` );
@@ -81,12 +84,12 @@ try {
 		await page.setViewport( { width: size, height: size, deviceScaleFactor: 1 } );
 		await page.setContent( `<html><body style="margin:0;background:transparent"><img src="${ iconUri }" width="${ size }" height="${ size }" style="display:block"></body></html>` );
 		const name = `icon-${ size }x${ size }.png`;
-		await page.screenshot( { path: join( HERE, name ), omitBackground: true, clip: { x: 0, y: 0, width: size, height: size } } );
+		await page.screenshot( { path: join( OUT, name ), omitBackground: true, clip: { x: 0, y: 0, width: size, height: size } } );
 		check( name, size, size );
 	}
 
 	/* Banners ---------------------------------------------------------- */
-	const banner = readFileSync( join( HERE, 'source/banner.html' ), 'utf8' )
+	const banner = readFileSync( join( HERE, 'banner.html' ), 'utf8' )
 		.replace( '/* FONTS: build-assets.mjs injects the Inter and Manrope @font-face rules here. */', FONTS )
 		.replace( 'ICON_URI', iconUri );
 
@@ -99,7 +102,7 @@ try {
 			throw new Error( 'Fonts not loaded: ' + missing.join( ', ' ) );
 		}
 		const name = `banner-${ width }x${ height }.png`;
-		await page.screenshot( { path: join( HERE, name ), clip: { x: 0, y: 0, width: 772, height: 250 } } );
+		await page.screenshot( { path: join( OUT, name ), clip: { x: 0, y: 0, width: 772, height: 250 } } );
 		check( name, width, height );
 	}
 
@@ -157,9 +160,9 @@ async function shoot( page, selector, name ) {
 	const box = await el.boundingBox();
 	const pad = 16;
 	await page.screenshot( {
-		path: join( HERE, name ),
+		path: join( OUT, name ),
 		clip: { x: Math.max( 0, box.x - pad ), y: Math.max( 0, box.y - pad ), width: box.width + pad * 2, height: box.height + pad * 2 },
 	} );
-	const [ w, h ] = pngSize( join( HERE, name ) );
-	console.log( `${ name }  ${ w }x${ h }  ${ Math.round( statSync( join( HERE, name ) ).size / 1024 ) } KB` );
+	const [ w, h ] = pngSize( join( OUT, name ) );
+	console.log( `${ name }  ${ w }x${ h }  ${ Math.round( statSync( join( OUT, name ) ).size / 1024 ) } KB` );
 }

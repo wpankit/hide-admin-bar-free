@@ -1,0 +1,52 @@
+name: Bug report
+description: Something in the plugin doesn't work as it should.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a bug. For questions about setting up or using the plugin, please use the [support forum](https://wordpress.org/support/plugin/hide-admin-bar-based-on-user-roles/). Security issues go through the [security policy](https://github.com/wpankit/hide-admin-bar-free/security/policy), not here.
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: For example, the admin bar still shows for a role you hid, or it disappears for someone it shouldn't.
+    validations:
+      required: true
+  - type: textarea
+    id: settings
+    attributes:
+      label: Your settings
+      description: Which options are on under Settings → Hide Admin Bar (hide for everyone, logged-out visitors, roles, capabilities)? And the role of the affected user.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Hide the admin bar for the Subscriber role.
+        2. Log in as a subscriber and open the home page.
+        3. ...
+    validations:
+      required: true
+  - type: input
+    id: plugin-version
+    attributes:
+      label: Plugin version
+      placeholder: e.g. 7.3.0
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: WordPress and PHP versions, theme, and plugins that change the toolbar
+      placeholder: e.g. WordPress 7.1, PHP 8.3, Astra, BuddyPress
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Errors or logs
+      description: PHP errors from debug.log or browser console errors, if any.
+      render: shell
