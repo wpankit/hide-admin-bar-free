@@ -37,7 +37,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 	<hr class="wp-header-end">
 
-	<?php include __DIR__ . '/review-banner.php'; ?>
+	<?php require __DIR__ . '/review-banner.php'; ?>
 
 	<div class="hab-layout">
 		<div class="hab-main">
@@ -127,7 +127,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 
 		<aside class="hab-sidebar">
-			<?php include __DIR__ . '/other-plugins.php'; ?>
+			<?php require __DIR__ . '/other-plugins.php'; ?>
 		</aside>
 	</div>
 </div>
