@@ -22,7 +22,7 @@ $days_since_install = floor( ( time() - $plugin_install_date ) / DAY_IN_SECONDS 
 // 1. Not permanently hidden
 // 2. Not temporarily hidden or temporary period has expired
 // 3. At least 7 days have passed since installation
-if ( $hide_review_banner !== 'permanent' &&
+if ( 'permanent' !== $hide_review_banner &&
 	( empty( $hide_review_until ) || time() > $hide_review_until ) &&
 	$days_since_install >= 7 ) :
 	?>

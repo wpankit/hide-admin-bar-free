@@ -76,7 +76,7 @@ class hab_Hide_Admin_Bar_Based_On_User_Roles_Admin {
 		 * class.
 		 */
 
-		if ( isset( $_GET['page'] ) && $_GET['page'] == 'hide-admin-bar-settings' ) {
+		if ( isset( $_GET['page'] ) && 'hide-admin-bar-settings' === $_GET['page'] ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Only checks which admin page is open.
 			wp_enqueue_style( $this->plugin_name . '-admin', plugin_dir_url( __FILE__ ) . 'css/hide-admin-bar-based-on-user-roles-admin.css', array( 'dashicons' ), $this->version, 'all' );
 		}
 	}
@@ -99,7 +99,7 @@ class hab_Hide_Admin_Bar_Based_On_User_Roles_Admin {
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
-		if ( isset( $_GET['page'] ) && $_GET['page'] == 'hide-admin-bar-settings' ) {
+		if ( isset( $_GET['page'] ) && 'hide-admin-bar-settings' === $_GET['page'] ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Only checks which admin page is open.
 			wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/hide-admin-bar-based-on-user-roles-admin.js', array( 'jquery' ), $this->version, true );
 			$args = array(
 				'url'          => admin_url( 'admin-ajax.php' ),
@@ -138,9 +138,10 @@ class hab_Hide_Admin_Bar_Based_On_User_Roles_Admin {
 		$settings      = get_option( 'hab_settings' );
 		$hab_reset_key = get_option( 'hab_reset_key' );
 
-		if ( ! empty( $hab_reset_key ) && isset( $_GET['reset_plugin'] ) && $_GET['reset_plugin'] == $hab_reset_key ) {
+		// The secret reset key in the link stands in for a nonce; only administrators see the link.
+		if ( ! empty( $hab_reset_key ) && isset( $_GET['reset_plugin'] ) && sanitize_text_field( wp_unslash( $_GET['reset_plugin'] ) ) === (string) $hab_reset_key ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			update_option( 'hab_settings', '' );
-			update_option( 'hab_reset_key', rand( 0, 999999999 ) );
+			update_option( 'hab_reset_key', wp_rand( 0, 999999999 ) );
 			echo '<script>window.location.reload();</script>';
 		}
 
@@ -172,24 +173,24 @@ class hab_Hide_Admin_Bar_Based_On_User_Roles_Admin {
 		if ( current_user_can( 'manage_options' ) && wp_verify_nonce( $_POST['hbaNonce'], 'hba-nonce' ) ) {
 
 			// Sanitize and validate all inputs
-			$UserRoles     = isset( $_REQUEST['UserRoles'] ) ? array_map( 'sanitize_text_field', (array) $_REQUEST['UserRoles'] ) : array();
-			$caps          = isset( $_REQUEST['caps'] ) ? sanitize_text_field( str_replace( '&nbsp;', '', $_REQUEST['caps'] ) ) : '';
-			$disableForAll = isset( $_REQUEST['disableForAll'] ) ? sanitize_text_field( $_REQUEST['disableForAll'] ) : 'no';
-			$forGuests     = isset( $_REQUEST['forGuests'] ) ? sanitize_text_field( $_REQUEST['forGuests'] ) : 'no';
+			$user_roles      = isset( $_REQUEST['UserRoles'] ) ? array_map( 'sanitize_text_field', (array) $_REQUEST['UserRoles'] ) : array();
+			$caps            = isset( $_REQUEST['caps'] ) ? sanitize_text_field( str_replace( '&nbsp;', '', $_REQUEST['caps'] ) ) : '';
+			$disable_for_all = isset( $_REQUEST['disableForAll'] ) ? sanitize_text_field( $_REQUEST['disableForAll'] ) : 'no';
+			$for_guests      = isset( $_REQUEST['forGuests'] ) ? sanitize_text_field( $_REQUEST['forGuests'] ) : 'no';
 
 			// Validate disableForAll is either 'yes' or 'no'
-			$disableForAll = in_array( $disableForAll, array( 'yes', 'no' ) ) ? $disableForAll : 'no';
+			$disable_for_all = in_array( $disable_for_all, array( 'yes', 'no' ), true ) ? $disable_for_all : 'no';
 
 			// Validate forGuests is either 'yes' or 'no'
-			$forGuests = in_array( $forGuests, array( 'yes', 'no' ) ) ? $forGuests : 'no';
+			$for_guests = in_array( $for_guests, array( 'yes', 'no' ), true ) ? $for_guests : 'no';
 
 			$settings                      = array();
-			$settings['hab_disableforall'] = $disableForAll;
+			$settings['hab_disableforall'] = $disable_for_all;
 
-			if ( $disableForAll == 'no' ) {
-				$settings['hab_userRoles']           = $UserRoles;
+			if ( 'no' === $disable_for_all ) {
+				$settings['hab_userRoles']           = $user_roles;
 				$settings['hab_capabilities']        = $caps;
-				$settings['hab_disableforallGuests'] = $forGuests;
+				$settings['hab_disableforallGuests'] = $for_guests;
 			}
 			update_option( 'hab_settings', $settings );
 			echo 'Success';
@@ -228,7 +229,7 @@ class hab_Hide_Admin_Bar_Based_On_User_Roles_Admin {
 		$plugin_base_file = false;
 
 		foreach ( $all_plugins as $file => $plugin ) {
-			if ( strpos( $file, $plugin_slug . '/' ) === 0 ) {
+			if ( 0 === strpos( $file, $plugin_slug . '/' ) ) {
 				$plugin_base_file = $file;
 				break;
 			}
@@ -270,7 +271,7 @@ class hab_Hide_Admin_Bar_Based_On_User_Roles_Admin {
 		$plugin_base_file  = false;
 
 		foreach ( $installed_plugins as $file => $plugin ) {
-			if ( strpos( $file, $plugin_slug . '/' ) === 0 ) {
+			if ( 0 === strpos( $file, $plugin_slug . '/' ) ) {
 				$plugin_base_file = $file;
 				break;
 			}
@@ -351,11 +352,11 @@ class hab_Hide_Admin_Bar_Based_On_User_Roles_Admin {
 		$user_id      = get_current_user_id();
 		$dismiss_type = sanitize_text_field( $_POST['dismiss_type'] );
 
-		if ( $dismiss_type === 'permanent' ) {
+		if ( 'permanent' === $dismiss_type ) {
 			update_user_meta( $user_id, 'hab_hide_review_banner', 'permanent' );
-		} elseif ( $dismiss_type === '30days' ) {
+		} elseif ( '30days' === $dismiss_type ) {
 			update_user_meta( $user_id, 'hab_hide_review_until', time() + ( 30 * DAY_IN_SECONDS ) );
-		} elseif ( $dismiss_type === 'now' ) {
+		} elseif ( 'now' === $dismiss_type ) {
 			// Set to show again after 15 days
 			update_user_meta( $user_id, 'hab_hide_review_until', time() + ( 15 * DAY_IN_SECONDS ) );
 		}

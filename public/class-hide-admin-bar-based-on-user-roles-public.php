@@ -93,7 +93,7 @@ class hab_Hide_Admin_Bar_Based_On_User_Roles_Public {
 		);
 
 		// Free checks
-		if ( isset( $settings['hab_disableforall'] ) && $settings['hab_disableforall'] === 'yes' ) {
+		if ( isset( $settings['hab_disableforall'] ) && 'yes' === $settings['hab_disableforall'] ) {
 			return true;
 		}
 		if ( $this->should_hide_for_user_role( $settings ) ) {
@@ -107,7 +107,7 @@ class hab_Hide_Admin_Bar_Based_On_User_Roles_Public {
 		}
 
 		$pro_conditions = apply_filters( 'hab_pro_should_hide_admin_bar', false );
-		if ( $pro_conditions === true ) {
+		if ( true === $pro_conditions ) {
 			return true;
 		}
 
@@ -122,11 +122,11 @@ class hab_Hide_Admin_Bar_Based_On_User_Roles_Public {
 	 * @since 6.0.0
 	 */
 	private function should_hide_for_user_role( $settings ) {
-		$plgUserRoles = ( isset( $settings['hab_userRoles'] ) ) ? $settings['hab_userRoles'] : '';
+		$plg_user_roles = ( isset( $settings['hab_userRoles'] ) ) ? $settings['hab_userRoles'] : '';
 
-		if ( is_array( $plgUserRoles ) ) {
-			$curUserObj = wp_get_current_user();
-			if ( array_intersect( $plgUserRoles, $curUserObj->roles ) ) {
+		if ( is_array( $plg_user_roles ) ) {
+			$cur_user_obj = wp_get_current_user();
+			if ( array_intersect( $plg_user_roles, $cur_user_obj->roles ) ) {
 				return true;
 			}
 		}
@@ -144,7 +144,7 @@ class hab_Hide_Admin_Bar_Based_On_User_Roles_Public {
 	private function should_hide_for_user_capability( $settings ) {
 		$raw_capabilities = ( isset( $settings['hab_capabilities'] ) ) ? $settings['hab_capabilities'] : '';
 
-		if ( ! is_string( $raw_capabilities ) || trim( $raw_capabilities ) === '' ) {
+		if ( ! is_string( $raw_capabilities ) || '' === trim( $raw_capabilities ) ) {
 			return false;
 		}
 
@@ -170,9 +170,9 @@ class hab_Hide_Admin_Bar_Based_On_User_Roles_Public {
 	 * @since 6.0.0
 	 */
 	private function should_hide_for_guests( $settings ) {
-		$hab_disableforallGuests = ( isset( $settings['hab_disableforallGuests'] ) ) ? $settings['hab_disableforallGuests'] : '';
+		$hab_disableforall_guests = ( isset( $settings['hab_disableforallGuests'] ) ) ? $settings['hab_disableforallGuests'] : '';
 
-		if ( $hab_disableforallGuests == 'yes' && ! is_user_logged_in() ) {
+		if ( 'yes' === $hab_disableforall_guests && ! is_user_logged_in() ) {
 			return true;
 		}
 
