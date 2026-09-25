@@ -1,0 +1,38 @@
+name: Plugin Check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  # Lets the action post its summary as a comment on pull requests.
+  pull-requests: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  plugin-check:
+    name: WordPress.org Plugin Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v7
+
+      # Check the plugin exactly as it ships: .gitattributes keeps development files out.
+      - name: Build the plugin as it ships
+        run: |
+          mkdir -p build/hide-admin-bar-based-on-user-roles
+          git archive HEAD | tar -x -C build/hide-admin-bar-based-on-user-roles
+
+      - name: Run Plugin Check
+        uses: wordpress/plugin-check-action@v1
+        with:
+          build-dir: ./build/hide-admin-bar-based-on-user-roles
+          # The bundled Freemius SDK is third-party code that Plugin Check reports on
+          # heavily; the check covers the plugin's own code.
+          exclude-directories: includes/freemius
