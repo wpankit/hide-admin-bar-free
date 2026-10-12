@@ -46,7 +46,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<form id="hab-settings-form" class="hab-card" novalidate>
 				<div class="hab-card-header">
 					<h2><?php esc_html_e( 'Who shouldn’t see the admin bar?', 'hide-admin-bar-based-on-user-roles' ); ?></h2>
-					<p><?php esc_html_e( 'These rules apply to the front end of your site. Inside the dashboard, WordPress always shows the admin bar.', 'hide-admin-bar-based-on-user-roles' ); ?></p>
+					<p><?php esc_html_e( 'These rules apply to the front end of your site. To hide the admin bar inside the dashboard too, use the Dashboard & login tab.', 'hide-admin-bar-based-on-user-roles' ); ?></p>
 				</div>
 
 				<div class="hab-setting">

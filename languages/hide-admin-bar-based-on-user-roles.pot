@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-12T08:00:32+00:00\n"
+"POT-Creation-Date: 2026-10-12T08:14:19+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.7.1\n"
 "X-Domain: hide-admin-bar-based-on-user-roles\n"
@@ -93,7 +93,7 @@ msgid "Who shouldn’t see the admin bar?"
 msgstr ""
 
 #: admin/partials/hide-admin-bar-based-on-user-roles-admin-display.php:49
-msgid "These rules apply to the front end of your site. Inside the dashboard, WordPress always shows the admin bar."
+msgid "These rules apply to the front end of your site. To hide the admin bar inside the dashboard too, use the Dashboard & login tab."
 msgstr ""
 
 #: admin/partials/hide-admin-bar-based-on-user-roles-admin-display.php:54
