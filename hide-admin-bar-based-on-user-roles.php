@@ -130,6 +130,11 @@ if ( ! function_exists( 'habbourp_fs' ) ) {
 	 */
 	require plugin_dir_path( __FILE__ ) . 'includes/class-hide-admin-bar-based-on-user-roles.php';
 	/**
+	 * Optional modules (dashboard access, login redirect and more). They run on their own and
+	 * don't change the admin bar rules above.
+	 */
+	require plugin_dir_path( __FILE__ ) . 'modules/class-hab-modules.php';
+	/**
 	 * Begins execution of the plugin.
 	 *
 	 * Since everything within the plugin is registered via hooks,

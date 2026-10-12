@@ -37,6 +37,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 	<hr class="wp-header-end">
 
+	<?php do_action( 'hab_settings_tabs', 'hide-admin-bar-settings' ); ?>
+
 	<?php require __DIR__ . '/review-banner.php'; ?>
 
 	<div class="hab-layout">
