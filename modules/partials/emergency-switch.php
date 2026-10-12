@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <section class="hab-card" aria-labelledby="hab-emergency-title">
 	<div class="hab-card-header">
 		<h2 id="hab-emergency-title"><?php esc_html_e( 'If something goes wrong', 'hide-admin-bar-based-on-user-roles' ); ?></h2>
-		<p><?php esc_html_e( 'If a rule on the Dashboard & login or Compatibility tab locks someone out, add this line to wp-config.php. It switches those features off and keeps your settings. The rules on the Admin bar tab keep working.', 'hide-admin-bar-based-on-user-roles' ); ?></p>
+		<p><?php esc_html_e( 'If a rule on the Dashboard & login, Admin cleanup or Compatibility tab locks someone out, add this line to wp-config.php. It switches those features off and keeps your settings. The rules on the Admin bar tab keep working.', 'hide-admin-bar-based-on-user-roles' ); ?></p>
 	</div>
 	<div class="hab-card-body">
 		<code class="hab-code">define( 'HAB_DISABLE_MODULES', true );</code>
