@@ -138,13 +138,36 @@ async function screenshots( page ) {
 		await page.click( '#hab-hide-for-all' );
 		await settle( page );
 		await shoot( page, '#hab-settings-form', 'screenshot-2.png' );
+
+		// 3. Dashboard & login tab with its three features switched on (not saved). The tall
+		// viewport keeps the sticky save bar at the end of the form.
+		await page.setViewport( { width: 1360, height: 2400, deviceScaleFactor: 2 } );
+		await open( page, 'hide-admin-bar-dashboard' );
+		await page.evaluate( () => {
+			const check = ( selector, checked ) => document.querySelectorAll( selector ).forEach( ( el ) => {
+				el.checked = checked;
+			} );
+			const role = ( module, key ) => `input[name="hab_modules[${ module }][roles][]"][value="${ key }"]`;
+			check( '.hab-modules-form input[type="checkbox"]', false );
+			check( '#hab-dashboard-access-enabled, #hab-dashboard-admin-bar-enabled, #hab-login-redirect-enabled', true );
+			check( role( 'dashboard_access', 'subscriber' ), true );
+			check( [ role( 'dashboard_admin_bar', 'author' ), role( 'dashboard_admin_bar', 'contributor' ) ].join( ',' ), true );
+			document.querySelectorAll( '.hab-modules-form input[type="text"]' ).forEach( ( el ) => {
+				el.value = '';
+			} );
+			document.querySelector( '#hab-dashboard-access-redirect' ).value = '/my-account/';
+			document.querySelector( '#hab-login-redirect-subscriber' ).value = '/my-account/';
+			document.querySelector( '#hab-login-redirect-editor' ).value = '/wp-admin/edit.php';
+		} );
+		await settle( page );
+		await shoot( page, '.hab-settings', 'screenshot-3.png' );
 	} finally {
 		wp( `WP_Session_Tokens::get_instance( ${ session.uid } )->destroy( "${ session.token }" );` );
 	}
 }
 
-async function open( page ) {
-	await page.goto( SITE_URL + '/wp-admin/options-general.php?page=hide-admin-bar-settings', { waitUntil: 'networkidle0' } );
+async function open( page, slug = 'hide-admin-bar-settings' ) {
+	await page.goto( SITE_URL + '/wp-admin/options-general.php?page=' + slug, { waitUntil: 'networkidle0' } );
 	// Show only the plugin page: no WordPress toolbar or menu, review request or other plugins' notices.
 	await page.addStyleTag( { content: 'html.wp-toolbar{padding-top:0!important}#wpadminbar,#adminmenumain,#wpfooter,#hab-review,.notice,.update-nag{display:none!important}#wpcontent{margin-left:0!important}' } );
 }

@@ -1,0 +1,154 @@
+/**
+ * Hide Admin Bar: the settings tabs and the module pages (Dashboard & login, Compatibility).
+ *
+ * The module pages also load the original settings page stylesheet and reuse its cards, switches
+ * and role chips. Everything is scoped to .hab-settings.
+ */
+
+/* Tabs --------------------------------------------------------------- */
+
+.hab-settings .hab-tabs {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px;
+	margin: 0 0 24px;
+	border-bottom: 1px solid var(--hab-border);
+}
+
+.hab-settings .hab-tab {
+	margin-bottom: -1px;
+	padding: 10px 14px;
+	border-bottom: 2px solid transparent;
+	color: var(--hab-muted);
+	font-size: 14px;
+	font-weight: 500;
+	text-decoration: none;
+	transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.hab-settings .hab-tab:hover {
+	color: var(--hab-text);
+	border-bottom-color: #a7aaad;
+}
+
+.hab-settings .hab-tab:focus {
+	border-radius: 4px 4px 0 0;
+	outline: 2px solid transparent;
+	box-shadow: 0 0 0 2px var(--hab-accent);
+}
+
+.hab-settings .hab-tab.is-active {
+	color: var(--hab-accent);
+	border-bottom-color: var(--hab-accent);
+	font-weight: 600;
+}
+
+/* Modules ------------------------------------------------------------ */
+
+.hab-settings .hab-module-body {
+	transition: opacity 0.15s ease;
+}
+
+/* A module's options can be set up before it's switched on; they're just dimmed until then. */
+.hab-settings .hab-module:has(.hab-module-toggle:not(:checked)) .hab-module-body {
+	opacity: 0.55;
+}
+
+.hab-settings input[type="text"].hab-url-input {
+	display: block;
+	max-width: 100%;
+	margin-top: 12px;
+}
+
+.hab-settings .hab-module-tip {
+	margin: 0;
+	padding: 12px 24px;
+	background: #f9f9fa;
+	border-top: 1px solid var(--hab-divider);
+	border-radius: 0 0 var(--hab-radius) var(--hab-radius);
+	color: var(--hab-muted);
+}
+
+.hab-settings .hab-redirects {
+	display: grid;
+	gap: 8px;
+	max-width: 640px;
+	margin-top: 12px;
+}
+
+.hab-settings .hab-redirect-row {
+	display: grid;
+	grid-template-columns: 160px minmax(0, 1fr);
+	align-items: center;
+	gap: 12px;
+}
+
+.hab-settings .hab-redirect-row label {
+	font-weight: 500;
+}
+
+.hab-settings .hab-redirect-row input[type="text"] {
+	width: 100%;
+	max-width: none;
+	margin: 0;
+}
+
+.hab-settings .hab-card-body {
+	padding: 0 24px 20px;
+}
+
+.hab-settings .hab-code {
+	display: block;
+	padding: 10px 12px;
+	border-radius: 4px;
+	font-size: 13px;
+	overflow-x: auto;
+	white-space: nowrap;
+}
+
+/* Save bar stays in view while scrolling through the cards. */
+.hab-settings .hab-savebar {
+	position: sticky;
+	bottom: 0;
+	z-index: 2;
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	margin: 0 0 24px;
+	padding: 14px 24px;
+	background: #fff;
+	border: 1px solid var(--hab-border);
+	border-radius: var(--hab-radius);
+	box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.hab-settings .hab-savebar .button {
+	margin: 0;
+}
+
+.hab-settings .hab-switched-off {
+	margin: 0 0 24px;
+}
+
+/* Small screens ------------------------------------------------------ */
+
+@media screen and (max-width: 782px) {
+	.hab-settings .hab-tab {
+		padding: 10px;
+	}
+
+	.hab-settings .hab-module-tip,
+	.hab-settings .hab-savebar {
+		padding-left: 16px;
+		padding-right: 16px;
+	}
+
+	.hab-settings .hab-card-body {
+		padding: 0 16px 16px;
+	}
+
+	.hab-settings .hab-redirect-row {
+		grid-template-columns: minmax(0, 1fr);
+		gap: 4px;
+	}
+}
