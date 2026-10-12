@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-12T09:34:00+00:00\n"
+"POT-Creation-Date: 2026-10-12T13:38:00+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.7.1\n"
 "X-Domain: hide-admin-bar-based-on-user-roles\n"
@@ -300,19 +300,13 @@ msgstr ""
 msgid "Compatibility"
 msgstr ""
 
-#. translators: 1: role name, 2: number of hidden items.
-#: modules/class-hab-modules-admin.php:172
-#: modules/partials/role-panels.php:47
-msgid "%1$s (%2$d hidden)"
-msgstr ""
-
-#: modules/class-hab-modules-admin.php:185
+#: modules/class-hab-modules-admin.php:173
 #: modules/partials/section-dashboard-access.php:72
 #: modules/partials/section-strict-mode.php:32
 msgid "Admin bar"
 msgstr ""
 
-#: modules/class-hab-modules-admin.php:190
+#: modules/class-hab-modules-admin.php:178
 msgid "Hide Admin Bar settings"
 msgstr ""
 
@@ -384,13 +378,9 @@ msgstr ""
 msgid "If a rule on the Dashboard & login, Admin cleanup or Compatibility tab locks someone out, add this line to wp-config.php. It switches those features off and keeps your settings. The rules on the Admin bar tab keep working."
 msgstr ""
 
-#: modules/partials/role-panels.php:37
-msgid "Role"
-msgstr ""
-
-#. translators: %s: role name.
-#: modules/partials/role-panels.php:63
-msgid "Hide for %s"
+#. translators: 1: item name, 2: role name.
+#: modules/partials/role-grid.php:65
+msgid "Hide %1$s for %2$s"
 msgstr ""
 
 #: modules/partials/section-admin-bar-items.php:20
@@ -410,7 +400,11 @@ msgid "Applies on your site and in the dashboard. Some items, such as Customize 
 msgstr ""
 
 #: modules/partials/section-admin-bar-items.php:34
-msgid "Pick a role, then tick the items to remove. Removing the account menu also removes its Log out link."
+msgid "Tick an item in a role’s column to remove it for that role. Removing the account menu also removes its Log out link."
+msgstr ""
+
+#: modules/partials/section-admin-bar-items.php:39
+msgid "Admin bar item"
 msgstr ""
 
 #: modules/partials/section-admin-menu.php:20
@@ -431,7 +425,11 @@ msgid "This tidies the menu but doesn’t lock the screens: someone who knows th
 msgstr ""
 
 #: modules/partials/section-admin-menu.php:42
-msgid "Pick a role, then tick the items to hide. Hiding a menu hides everything under it. Settings always stays, so you can get back here."
+msgid "Tick an item in a role’s column to hide it for that role. Hiding a menu hides everything under it. Settings always stays, so you can get back here."
+msgstr ""
+
+#: modules/partials/section-admin-menu.php:47
+msgid "Menu item"
 msgstr ""
 
 #: modules/partials/section-admin-notices.php:20
@@ -546,7 +544,11 @@ msgid "Dashboard"
 msgstr ""
 
 #: modules/partials/section-dashboard-widgets.php:46
-msgid "Pick a role, then tick the widgets to hide."
+msgid "Tick a widget in a role’s column to hide it for that role."
+msgstr ""
+
+#: modules/partials/section-dashboard-widgets.php:51
+msgid "Widget"
 msgstr ""
 
 #: modules/partials/section-login-redirect.php:20

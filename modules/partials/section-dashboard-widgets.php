@@ -43,12 +43,13 @@ $hab_values = $settings['dashboard_widgets'];
 
 	<div class="hab-module-body">
 		<div class="hab-setting hab-setting-stacked">
-			<p class="hab-setting-desc"><?php esc_html_e( 'Pick a role, then tick the widgets to hide.', 'hide-admin-bar-based-on-user-roles' ); ?></p>
+			<p class="hab-setting-desc"><?php esc_html_e( 'Tick a widget in a role’s column to hide it for that role.', 'hide-admin-bar-based-on-user-roles' ); ?></p>
 			<?php
 			$hab_panel_section = 'dashboard_widgets';
 			$hab_panel_items   = hab_Admin_Items::dashboard_widgets();
 			$hab_panel_hidden  = $hab_values['hidden'];
-			require __DIR__ . '/role-panels.php';
+			$hab_grid_label    = __( 'Widget', 'hide-admin-bar-based-on-user-roles' );
+			require __DIR__ . '/role-grid.php';
 			?>
 		</div>
 	</div>

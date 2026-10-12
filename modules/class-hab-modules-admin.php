@@ -161,18 +161,6 @@ class hab_Modules_Admin {
 		}
 
 		wp_enqueue_style( 'hab-modules-admin', $plugin_url . 'modules/css/modules-admin.css', array(), HIDE_ADMIN_BAR_BASED_ON_USER_ROLES );
-
-		if ( hab_Admin_Items::PAGE === $this->current_page() ) {
-			wp_enqueue_script( 'hab-modules-admin', $plugin_url . 'modules/js/modules-admin.js', array(), HIDE_ADMIN_BAR_BASED_ON_USER_ROLES, true );
-			wp_localize_script(
-				'hab-modules-admin',
-				'habModules',
-				array(
-					/* translators: 1: role name, 2: number of hidden items. */
-					'hiddenCount' => __( '%1$s (%2$d hidden)', 'hide-admin-bar-based-on-user-roles' ),
-				)
-			);
-		}
 	}
 
 	/**
