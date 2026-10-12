@@ -14,7 +14,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Adds the "Dashboard & login" and "Compatibility" tabs next to the original settings page.
+ * Adds the "Dashboard & login", "Admin cleanup" and "Compatibility" tabs next to the original
+ * settings page.
  *
  * Each tab is its own page under Settings, hidden from the menu so that Settings keeps a single
  * "Hide Admin Bar Settings" item. The original page shows the tabs through the hab_settings_tabs
@@ -43,6 +44,8 @@ class hab_Modules_Admin {
 		add_action( 'admin_init', array( $this, 'register_setting' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_styles' ) );
 		add_action( 'hab_settings_tabs', array( $this, 'render_tabs' ) );
+
+		hab_Admin_Items::register();
 	}
 
 	/**
@@ -55,7 +58,11 @@ class hab_Modules_Admin {
 		return array(
 			'hide-admin-bar-dashboard'     => array(
 				'title'    => __( 'Dashboard & login', 'hide-admin-bar-based-on-user-roles' ),
-				'sections' => array( 'dashboard_access', 'dashboard_admin_bar', 'login_redirect' ),
+				'sections' => array( 'dashboard_access', 'dashboard_admin_bar', 'login_redirect', 'switch_user' ),
+			),
+			hab_Admin_Items::PAGE          => array(
+				'title'    => __( 'Admin cleanup', 'hide-admin-bar-based-on-user-roles' ),
+				'sections' => array( 'admin_menu', 'admin_bar_items', 'admin_notices', 'dashboard_widgets' ),
 			),
 			'hide-admin-bar-compatibility' => array(
 				'title'    => __( 'Compatibility', 'hide-admin-bar-based-on-user-roles' ),
@@ -154,6 +161,18 @@ class hab_Modules_Admin {
 		}
 
 		wp_enqueue_style( 'hab-modules-admin', $plugin_url . 'modules/css/modules-admin.css', array(), HIDE_ADMIN_BAR_BASED_ON_USER_ROLES );
+
+		if ( hab_Admin_Items::PAGE === $this->current_page() ) {
+			wp_enqueue_script( 'hab-modules-admin', $plugin_url . 'modules/js/modules-admin.js', array(), HIDE_ADMIN_BAR_BASED_ON_USER_ROLES, true );
+			wp_localize_script(
+				'hab-modules-admin',
+				'habModules',
+				array(
+					/* translators: 1: role name, 2: number of hidden items. */
+					'hiddenCount' => __( '%1$s (%2$d hidden)', 'hide-admin-bar-based-on-user-roles' ),
+				)
+			);
+		}
 	}
 
 	/**

@@ -161,6 +161,43 @@ async function screenshots( page ) {
 		} );
 		await settle( page );
 		await shoot( page, '.hab-settings', 'screenshot-3.png' );
+
+		// 4. Admin cleanup tab for the Editor role (not saved). Opening the Dashboard first lists
+		// its widgets on the tab.
+		await page.goto( SITE_URL + '/wp-admin/', { waitUntil: 'networkidle0' } );
+		await page.setViewport( { width: 1360, height: 3000, deviceScaleFactor: 2 } );
+		await open( page, 'hide-admin-bar-cleanup' );
+		await page.evaluate( () => {
+			const form = document.querySelector( '.hab-modules-form' );
+			form.querySelectorAll( 'input[type="checkbox"]' ).forEach( ( el ) => {
+				el.checked = false;
+			} );
+			form.querySelectorAll( '.hab-module-toggle' ).forEach( ( el ) => {
+				el.checked = true;
+			} );
+			form.querySelectorAll( '.hab-role-select' ).forEach( ( el ) => {
+				el.value = 'editor';
+			} );
+			const hide = ( section, ids ) => ids.forEach( ( id ) => {
+				const box = form.querySelector( `input[name="hab_modules[${ section }][hidden][editor][]"][value="${ id }"]` );
+				if ( box ) {
+					box.checked = true;
+				}
+			} );
+			hide( 'admin_menu', [ 'edit-comments.php', 'tools.php', 'edit.php|edit-tags.php?taxonomy=post_tag' ] );
+			hide( 'admin_bar_items', [ 'wp-logo', 'comments', 'new-content' ] );
+			hide( 'dashboard_widgets', [ 'welcome_panel', 'dashboard_primary', 'dashboard_quick_press' ] );
+			form.querySelectorAll( 'input[name="hab_modules[admin_notices][roles][]"]' ).forEach( ( el ) => {
+				el.checked = [ 'editor', 'author' ].includes( el.value );
+			} );
+			// Refresh each role picker: which checklist shows, then the "(n hidden)" counts.
+			form.querySelectorAll( '.hab-role-panels' ).forEach( ( wrap ) => {
+				wrap.querySelector( '.hab-role-select' ).dispatchEvent( new Event( 'change', { bubbles: true } ) );
+				wrap.querySelector( 'input[type="checkbox"]' ).dispatchEvent( new Event( 'change', { bubbles: true } ) );
+			} );
+		} );
+		await settle( page );
+		await shoot( page, '.hab-settings', 'screenshot-4.png' );
 	} finally {
 		wp( `WP_Session_Tokens::get_instance( ${ session.uid } )->destroy( "${ session.token }" );` );
 	}

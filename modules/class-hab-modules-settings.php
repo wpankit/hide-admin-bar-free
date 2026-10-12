@@ -55,6 +55,25 @@ class hab_Modules_Settings {
 			'strict_mode'         => array(
 				'enabled' => false,
 			),
+			'switch_user'         => array(
+				'enabled' => false,
+			),
+			'admin_menu'          => array(
+				'enabled' => false,
+				'hidden'  => array(),
+			),
+			'admin_bar_items'     => array(
+				'enabled' => false,
+				'hidden'  => array(),
+			),
+			'admin_notices'       => array(
+				'enabled' => false,
+				'roles'   => array(),
+			),
+			'dashboard_widgets'   => array(
+				'enabled' => false,
+				'hidden'  => array(),
+			),
 		);
 	}
 
@@ -79,6 +98,9 @@ class hab_Modules_Settings {
 			}
 			if ( isset( $defaults['urls'] ) ) {
 				$settings[ $section ]['urls'] = array_filter( (array) $settings[ $section ]['urls'], 'is_string' );
+			}
+			if ( isset( $defaults['hidden'] ) ) {
+				$settings[ $section ]['hidden'] = self::role_map( $settings[ $section ]['hidden'] );
 			}
 		}
 
@@ -201,6 +223,140 @@ class hab_Modules_Settings {
 		return array(
 			'enabled' => ! empty( $values['enabled'] ),
 		);
+	}
+
+	/**
+	 * Clean the switch to user settings.
+	 *
+	 * @since 7.5.0
+	 * @param array $values Submitted values.
+	 * @return array
+	 */
+	private static function sanitize_switch_user( $values ) {
+		return array(
+			'enabled' => ! empty( $values['enabled'] ),
+		);
+	}
+
+	/**
+	 * Clean the admin menu settings.
+	 *
+	 * @since 7.5.0
+	 * @param array $values Submitted values.
+	 * @return array
+	 */
+	private static function sanitize_admin_menu( $values ) {
+		return array(
+			'enabled' => ! empty( $values['enabled'] ),
+			'hidden'  => self::sanitize_role_map( isset( $values['hidden'] ) ? $values['hidden'] : array() ),
+		);
+	}
+
+	/**
+	 * Clean the admin bar items settings.
+	 *
+	 * @since 7.5.0
+	 * @param array $values Submitted values.
+	 * @return array
+	 */
+	private static function sanitize_admin_bar_items( $values ) {
+		return array(
+			'enabled' => ! empty( $values['enabled'] ),
+			'hidden'  => self::sanitize_role_map( isset( $values['hidden'] ) ? $values['hidden'] : array() ),
+		);
+	}
+
+	/**
+	 * Clean the admin notices settings.
+	 *
+	 * @since 7.5.0
+	 * @param array $values Submitted values.
+	 * @return array
+	 */
+	private static function sanitize_admin_notices( $values ) {
+		return array(
+			'enabled' => ! empty( $values['enabled'] ),
+			'roles'   => self::sanitize_roles( isset( $values['roles'] ) ? $values['roles'] : array() ),
+		);
+	}
+
+	/**
+	 * Clean the dashboard widgets settings.
+	 *
+	 * @since 7.5.0
+	 * @param array $values Submitted values.
+	 * @return array
+	 */
+	private static function sanitize_dashboard_widgets( $values ) {
+		return array(
+			'enabled' => ! empty( $values['enabled'] ),
+			'hidden'  => self::sanitize_role_map( isset( $values['hidden'] ) ? $values['hidden'] : array() ),
+		);
+	}
+
+	/**
+	 * Clean a list of hidden items per role: existing roles only, plain-text item IDs.
+	 *
+	 * @since 7.5.0
+	 * @param mixed $map Submitted map of role => item IDs.
+	 * @return array
+	 */
+	private static function sanitize_role_map( $map ) {
+		$names = wp_roles()->get_names();
+		$clean = array();
+
+		foreach ( self::role_map( $map ) as $role => $items ) {
+			if ( ! isset( $names[ $role ] ) ) {
+				continue;
+			}
+			$items = array_values( array_unique( array_filter( array_map( 'sanitize_text_field', $items ), 'strlen' ) ) );
+			if ( $items ) {
+				$clean[ $role ] = array_slice( $items, 0, 500 );
+			}
+		}
+
+		return $clean;
+	}
+
+	/**
+	 * Shape a stored or submitted value as role => list of strings.
+	 *
+	 * @since 7.5.0
+	 * @param mixed $map Value to shape.
+	 * @return array
+	 */
+	private static function role_map( $map ) {
+		$shaped = array();
+		if ( ! is_array( $map ) ) {
+			return $shaped;
+		}
+
+		foreach ( $map as $role => $items ) {
+			if ( is_string( $role ) && is_array( $items ) ) {
+				$shaped[ $role ] = array_values( array_filter( $items, 'is_string' ) );
+			}
+		}
+
+		return $shaped;
+	}
+
+	/**
+	 * Every item hidden for any of the given roles.
+	 *
+	 * @since 7.5.0
+	 * @param array    $hidden Map of role => item IDs.
+	 * @param string[] $roles  The user's roles.
+	 * @return string[]
+	 */
+	public static function hidden_for_roles( $hidden, $roles ) {
+		$items = array();
+		foreach ( (array) $roles as $role ) {
+			if ( isset( $hidden[ $role ] ) ) {
+				$items = array_merge( $items, $hidden[ $role ] );
+			}
+		}
+
+		return array_values( array_unique( $items ) );
 	}
 
 	/**

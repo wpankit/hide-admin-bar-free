@@ -18,7 +18,7 @@ hold only these files:
 | `banner-1544x500.png` | 1544x500 | High-DPI banner |
 | `icon.svg` | vector | Plugin icon, used where supported |
 | `icon-256x256.png`, `icon-128x128.png` | | Icon fallbacks (required with an SVG icon) |
-| `screenshot-1.png` to `screenshot-3.png` | | Screenshots; captions come from `== Screenshots ==` in `README.txt` |
+| `screenshot-1.png` to `screenshot-4.png` | | Screenshots; captions come from `== Screenshots ==` in `README.txt` |
 
 ## Regenerating
 

@@ -152,3 +152,92 @@
 		gap: 4px;
 	}
 }
+
+/* Checklists per role (Admin cleanup) ------------------------------- */
+
+.hab-settings .hab-role-picker {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px 12px;
+	margin-top: 12px;
+}
+
+.hab-settings .hab-role-picker label {
+	font-weight: 600;
+}
+
+.hab-settings .hab-role-picker select {
+	min-width: 220px;
+	max-width: 100%;
+}
+
+.hab-settings .hab-role-panel {
+	min-width: 0;
+	margin: 16px 0 0;
+	padding: 0;
+	border: 0;
+}
+
+.hab-settings .hab-role-panel[hidden] {
+	display: none;
+}
+
+.hab-settings .hab-role-panel-title {
+	margin: 0 0 8px;
+	padding: 0;
+	font-weight: 600;
+}
+
+/* With the role picker working, the picker names the role, so the panel title is for screen readers only. */
+.hab-settings .hab-role-panels.is-enhanced .hab-role-panel-title {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip: rect(1px, 1px, 1px, 1px);
+	white-space: nowrap;
+}
+
+.hab-settings .hab-checklist {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	column-width: 220px;
+	column-gap: 24px;
+}
+
+.hab-settings .hab-checklist > li {
+	margin: 0 0 8px;
+	break-inside: avoid;
+}
+
+.hab-settings .hab-checklist label {
+	display: inline-flex;
+	align-items: flex-start;
+	gap: 8px;
+	line-height: 1.5;
+}
+
+.hab-settings .hab-checklist input[type="checkbox"] {
+	margin: 2px 0 0;
+}
+
+.hab-settings .hab-checklist > li > label {
+	font-weight: 500;
+}
+
+.hab-settings .hab-checklist-children {
+	margin: 4px 0 0 26px;
+	padding: 0;
+	list-style: none;
+}
+
+.hab-settings .hab-checklist-children li {
+	margin: 0 0 4px;
+}
+
+/* Hiding a whole menu hides its submenu items too. */
+.hab-settings .hab-checklist li:has(> label input:checked) > .hab-checklist-children {
+	opacity: 0.45;
+}

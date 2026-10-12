@@ -7,7 +7,7 @@ Author URI: https://wpankit.com/
 Requires at least: 5.5
 Tested up to: 7.1
 Requires PHP: 5.6
-Stable tag: 7.4.0
+Stable tag: 7.5.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -60,6 +60,16 @@ Optional extras, each off until you switch it on:
 * **Admin bar in the dashboard:** hide the admin bar inside wp-admin for the roles you pick.
 * **Login redirect:** choose where each role lands after logging in, such as the home page or a My Account page.
 * **Strict mode:** keep the admin bar hidden when another plugin, such as BuddyPress, wpForo or WC Vendors, turns it back on.
+* **Switch to user:** see your site exactly as one of your users does, then switch back in one click. Only administrators can switch, and only to users who can't manage the site.
+
+= Admin cleanup =
+
+Give each role a tidier dashboard. Also off until you switch it on:
+
+* **Admin menu:** hide the menu items a role doesn't need, such as Tools, Comments or a plugin's menu.
+* **Admin bar items:** keep the admin bar but remove items such as the WordPress logo, Comments or + New.
+* **Admin notices:** hide the notices at the top of dashboard screens for the roles you pick.
+* **Dashboard widgets:** choose which boxes each role sees on the Dashboard home screen.
 
 = Works with your setup =
 
@@ -109,8 +119,20 @@ Yes. On the Dashboard & login tab, turn on “Redirect after login” and enter 
 = Another plugin keeps showing the admin bar. What can I do? =
 Some plugins, such as BuddyPress, wpForo or WC Vendors, turn the admin bar back on. Go to the Compatibility tab and turn on Strict mode. It applies your admin bar rules once more, after every other plugin.
 
+= Can I hide admin menu items for a role? =
+Yes. On the Admin cleanup tab, turn on “Hide admin menu items”, pick a role and tick the items to hide. Hiding a menu tidies it but doesn't lock the screen; to keep a role out of wp-admin altogether, use Dashboard access. The Settings menu always stays, so you can get back to these settings.
+
+= Can I remove items from the admin bar instead of hiding the whole bar? =
+Yes. On the Admin cleanup tab, turn on “Remove admin bar items”, pick a role and tick items such as the WordPress logo, Comments or + New. It applies on your site and in the dashboard.
+
+= Can I hide admin notices for my clients? =
+Yes. On the Admin cleanup tab, turn on “Hide admin notices” and pick the roles. It hides every notice for those roles, including update reminders, so keep it off for the people who look after the site.
+
+= How can I check what a user sees? =
+On the Dashboard & login tab, turn on “Allow switching to users”. Then, on the Users screen, click the “Switch to” button next to a user. A bar at the bottom of the screen shows who you're viewing as, with a link to switch back.
+
 = I locked someone out of the dashboard. How do I undo it? =
-Add `define( 'HAB_DISABLE_MODULES', true );` to wp-config.php. It switches off everything on the Dashboard & login and Compatibility tabs and keeps your settings. Your admin bar rules keep working. Remove the line once you've fixed the settings.
+Add `define( 'HAB_DISABLE_MODULES', true );` to wp-config.php. It switches off everything on the Dashboard & login, Admin cleanup and Compatibility tabs and keeps your settings. Your admin bar rules keep working. Remove the line once you've fixed the settings.
 
 = Will this plugin slow down my site? =
 No. It adds no CSS or JavaScript to the front end, and the visibility check runs once per page, before the page is built.
@@ -129,8 +151,14 @@ No. Hide Admin Bar is completely free, with no locked features and no upsells.
 1. Choose who doesn't see the admin bar: everyone, logged-out visitors, specific roles, or users with certain capabilities.
 2. “Hide for everyone” removes the admin bar for every logged-in user.
 3. Dashboard & login: keep roles out of wp-admin, hide the admin bar inside the dashboard, and choose where each role lands after logging in.
+4. Admin cleanup: hide admin menu items, admin bar items, notices and dashboard widgets for each role.
 
 == Changelog ==
+
+= 7.5.0 =
+* New: Admin cleanup tab. Hide admin menu items, admin bar items, admin notices and dashboard widgets for each role.
+* New: Switch to user. See your site as one of your users, then switch back in one click.
+* Every new feature is off until you switch it on. Your admin bar settings and how they work are unchanged.
 
 = 7.4.0 =
 * New: Dashboard access. Keep chosen roles out of wp-admin and send them to a page you pick. Administrators always keep access.
@@ -339,6 +367,9 @@ Fixed some bugs and improvements.
 First release
 
 == Upgrade Notice ==
+
+= 7.5.0 =
+New, optional Admin cleanup tab and Switch to user. They're off until you switch them on, and your admin bar settings are kept.
 
 = 7.4.0 =
 New, optional dashboard access, login redirect and strict mode settings. They're off until you switch them on, and your admin bar settings are kept.

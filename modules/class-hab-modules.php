@@ -2,9 +2,11 @@
 /**
  * Optional modules, added in 7.4.0.
  *
- * Dashboard access, the admin bar inside the dashboard, login redirects and strict mode. Each
- * module is off until it's switched on and keeps its settings in the hab_modules option. None of
- * them changes the original admin bar rules or the hab_settings option.
+ * Dashboard access, the admin bar inside the dashboard, login redirects and strict mode (7.4.0);
+ * switch to user, and hiding admin menu items, admin bar items, admin notices and dashboard
+ * widgets by role (7.5.0). Each module is off until it's switched on and keeps its settings in
+ * the hab_modules option. None of them changes the original admin bar rules or the hab_settings
+ * option.
  *
  * Defining HAB_DISABLE_MODULES as true in wp-config.php switches every module off and keeps
  * their settings.
@@ -26,6 +28,12 @@ require_once __DIR__ . '/class-hab-dashboard-access.php';
 require_once __DIR__ . '/class-hab-dashboard-admin-bar.php';
 require_once __DIR__ . '/class-hab-login-redirect.php';
 require_once __DIR__ . '/class-hab-strict-mode.php';
+require_once __DIR__ . '/class-hab-admin-items.php';
+require_once __DIR__ . '/class-hab-switch-user.php';
+require_once __DIR__ . '/class-hab-admin-menu.php';
+require_once __DIR__ . '/class-hab-admin-bar-items.php';
+require_once __DIR__ . '/class-hab-admin-notices.php';
+require_once __DIR__ . '/class-hab-dashboard-widgets.php';
 
 /**
  * Start the settings pages and every module that is switched on.
@@ -64,6 +72,26 @@ function hab_run_modules() {
 	if ( $settings['strict_mode']['enabled'] ) {
 		new hab_Strict_Mode();
 	}
+
+	if ( $settings['switch_user']['enabled'] ) {
+		new hab_Switch_User();
+	}
+
+	if ( $settings['admin_menu']['enabled'] && $settings['admin_menu']['hidden'] ) {
+		new hab_Admin_Menu( $settings['admin_menu'] );
+	}
+
+	if ( $settings['admin_bar_items']['enabled'] && $settings['admin_bar_items']['hidden'] ) {
+		new hab_Admin_Bar_Items( $settings['admin_bar_items'] );
+	}
+
+	if ( $settings['admin_notices']['enabled'] && $settings['admin_notices']['roles'] ) {
+		new hab_Admin_Notices( $settings['admin_notices'] );
+	}
+
+	if ( $settings['dashboard_widgets']['enabled'] && $settings['dashboard_widgets']['hidden'] ) {
+		new hab_Dashboard_Widgets( $settings['dashboard_widgets'] );
+	}
 }
 
 add_action( 'plugins_loaded', 'hab_run_modules' );
@@ -75,6 +103,7 @@ add_action( 'plugins_loaded', 'hab_run_modules' );
  */
 function hab_modules_uninstall_cleanup() {
 	delete_option( hab_Modules_Settings::OPTION );
+	delete_option( hab_Admin_Items::WIDGETS_OPTION );
 }
 
 habbourp_fs()->add_action( 'after_uninstall', 'hab_modules_uninstall_cleanup' );
