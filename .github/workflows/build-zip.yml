@@ -1,0 +1,86 @@
+name: Build plugin zip
+
+# Builds the plugin zip that goes to WordPress.org: the plugin files in a
+# hide-admin-bar-based-on-user-roles/ folder, without the development files marked
+# export-ignore in .gitattributes. Nothing is sent to WordPress.org; releases are
+# committed to SVN by hand.
+#
+# - Run it by hand (Actions > Build plugin zip > Run workflow): the zip is under
+#   "Artifacts" at the bottom of the run's page.
+# - Publish a GitHub release (tag 1.2.3 or v1.2.3): the zip is also attached to the
+#   release, so it can be downloaded from the Releases page.
+#
+# GitHub's own "Source code (zip)" download is not the same: its folder is named after
+# the repository, so WordPress would install it as a second copy of the plugin.
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  SLUG: hide-admin-bar-based-on-user-roles
+
+jobs:
+  build:
+    name: Build the zip
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v7
+
+      - name: Check the version numbers match
+        id: version
+        run: |
+          VERSION=$(sed -n 's/^[[:space:]]*\*[[:space:]]*Version:[[:space:]]*//p' "$SLUG.php" | head -n 1 | tr -d '[:space:]')
+          STABLE=$(sed -n 's/^Stable tag:[[:space:]]*//p' README.txt | head -n 1 | tr -d '[:space:]')
+          CONSTANT=$(sed -n "s/^[[:space:]]*define( 'HIDE_ADMIN_BAR_BASED_ON_USER_ROLES', '\([^']*\)' );/\1/p" "$SLUG.php" | head -n 1)
+          echo "Plugin header: $VERSION, HIDE_ADMIN_BAR_BASED_ON_USER_ROLES: $CONSTANT, readme Stable tag: $STABLE"
+          if [ -z "$VERSION" ] || [ "$VERSION" != "$STABLE" ] || [ "$VERSION" != "$CONSTANT" ]; then
+            echo "::error::The plugin header Version, HIDE_ADMIN_BAR_BASED_ON_USER_ROLES and the readme Stable tag must all be the same."
+            exit 1
+          fi
+          if [ "$GITHUB_EVENT_NAME" = "release" ] && [ "${RELEASE_TAG#v}" != "$VERSION" ]; then
+            echo "::error::The release tag ($RELEASE_TAG) does not match the plugin version ($VERSION)."
+            exit 1
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+
+      - name: Build the zip
+        id: zip
+        run: |
+          mkdir -p build
+          git archive --format=tar --prefix="$SLUG/" HEAD | tar -x -C build
+          ZIP="$SLUG-$VERSION.zip"
+          (cd build && zip -q -r -X "../$ZIP" "$SLUG")
+          unzip -l "$ZIP" | tail -n 1
+          echo "path=$ZIP" >> "$GITHUB_OUTPUT"
+          {
+            echo "### $ZIP"
+            echo ""
+            echo "Download it from **Artifacts** below. It holds the \`$SLUG/\` folder, ready to install or to copy into SVN."
+          } >> "$GITHUB_STEP_SUMMARY"
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+
+      # GitHub always wraps an artifact in a zip, so the artifact holds the plugin folder
+      # itself: the download is then a normal plugin zip, not a zip inside a zip.
+      - name: Keep the zip as an artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ env.SLUG }}-${{ steps.version.outputs.version }}
+          path: build/
+          if-no-files-found: error
+
+      - name: Attach the zip to the release
+        if: github.event_name == 'release'
+        run: gh release upload "$RELEASE_TAG" "$ZIP_PATH" --clobber
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+          ZIP_PATH: ${{ steps.zip.outputs.path }}

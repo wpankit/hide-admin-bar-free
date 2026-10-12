@@ -71,10 +71,12 @@ Development files are marked `export-ignore` in `.gitattributes`, so they never 
 For maintainers:
 
 1. In a pull request, set the new version in the plugin header, in `HIDE_ADMIN_BAR_BASED_ON_USER_ROLES` and in the `Stable tag` of `README.txt`, and add the changelog entry.
-2. Merge it, then [publish a release](https://github.com/wpankit/hide-admin-bar-free/releases/new) from `main` with the tag `vX.Y.Z`.
-3. The **Deploy to WordPress.org** workflow checks the three version numbers match the tag, commits `trunk` and `tags/X.Y.Z` to SVN, updates the listing assets and attaches the plugin zip to the release.
+2. Merge it, then get the plugin zip from the **Build plugin zip** workflow:
+   - run it by hand from `main` (Actions > Build plugin zip > Run workflow) and download the zip under **Artifacts** on the run's page, or
+   - [publish a release](https://github.com/wpankit/hide-admin-bar-free/releases/new) from `main` with the tag `X.Y.Z` or `vX.Y.Z`, and the zip is attached to the release.
 
-To publish readme or screenshot changes without a release, run the **Update readme and assets on WordPress.org** workflow by hand. Both workflows need the repository secrets `SVN_USERNAME` and `SVN_PASSWORD`.
+   The workflow first checks that the three version numbers match (and the release tag, for a release). The zip holds the `hide-admin-bar-based-on-user-roles/` folder. Don't use GitHub's "Source code (zip)" download: its folder is named after the repository, so WordPress would install it as a second plugin.
+3. Commit the release to the WordPress.org SVN repository by hand: the zip's files to `tags/X.Y.Z` and `trunk`, and `.wordpress-org/` to `assets/` when the listing images change. Nothing in this repository has WordPress.org credentials.
 
 ## Contributing
 

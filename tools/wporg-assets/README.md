@@ -8,9 +8,9 @@ builds them. Neither folder is part of the plugin: `.gitattributes` marks both
 ## How they reach wordpress.org
 
 wordpress.org serves listing assets from the **`/assets/` directory of the SVN
-repository**, not from `trunk/` or a tag. The **Deploy to WordPress.org** workflow copies
-`.wordpress-org/` there with every release, and **Update readme and assets on
-WordPress.org** does it between releases, so `.wordpress-org/` must hold only these files:
+repository**, not from `trunk/` or a tag. Copy the files from `.wordpress-org/` there by
+hand when they change (and set `svn:mime-type` on new images), so `.wordpress-org/` must
+hold only these files:
 
 | File | Size | Used for |
 | --- | --- | --- |
