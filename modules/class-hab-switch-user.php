@@ -35,6 +35,9 @@ class hab_Switch_User {
 	 */
 	public function __construct() {
 		add_filter( 'user_row_actions', array( $this, 'row_action' ), 10, 2 );
+		add_filter( 'manage_users_columns', array( $this, 'add_column' ) );
+		add_filter( 'manage_users_custom_column', array( $this, 'render_column' ), 10, 3 );
+		add_action( 'admin_head-users.php', array( $this, 'print_column_styles' ) );
 		add_action( 'admin_post_hab_switch_to_user', array( $this, 'switch_to' ) );
 		add_action( 'init', array( $this, 'maybe_switch_back' ), 1 );
 		add_action( 'wp_footer', array( $this, 'print_switch_bar' ) );
@@ -70,6 +73,26 @@ class hab_Switch_User {
 	}
 
 	/**
+	 * Address that switches to a user.
+	 *
+	 * @since 7.5.0
+	 * @param WP_User $user The user to switch to.
+	 * @return string
+	 */
+	private function switch_to_url( $user ) {
+		return wp_nonce_url(
+			add_query_arg(
+				array(
+					'action'  => 'hab_switch_to_user',
+					'user_id' => $user->ID,
+				),
+				admin_url( 'admin-post.php' )
+			),
+			'hab_switch_to_user_' . $user->ID
+		);
+	}
+
+	/**
 	 * Add "Switch to" under the user's name on the Users screen.
 	 *
 	 * @since 7.5.0
@@ -79,21 +102,60 @@ class hab_Switch_User {
 	 */
 	public function row_action( $actions, $user ) {
 		if ( $this->can_switch_to( $user ) ) {
-			$url = wp_nonce_url(
-				add_query_arg(
-					array(
-						'action'  => 'hab_switch_to_user',
-						'user_id' => $user->ID,
-					),
-					admin_url( 'admin-post.php' )
-				),
-				'hab_switch_to_user_' . $user->ID
-			);
-
-			$actions['hab_switch_to'] = '<a href="' . esc_url( $url ) . '">' . esc_html__( 'Switch to', 'hide-admin-bar-based-on-user-roles' ) . '</a>';
+			$actions['hab_switch_to'] = '<a href="' . esc_url( $this->switch_to_url( $user ) ) . '">' . esc_html__( 'Switch to', 'hide-admin-bar-based-on-user-roles' ) . '</a>';
 		}
 
 		return $actions;
+	}
+
+	/**
+	 * Add a "Switch to" column to the Users screen, for quick access. It can be hidden from
+	 * Screen Options like any other column.
+	 *
+	 * @since 7.5.0
+	 * @param string[] $columns Column titles.
+	 * @return string[]
+	 */
+	public function add_column( $columns ) {
+		if ( current_user_can( 'manage_options' ) ) {
+			$columns['hab_switch_to'] = __( 'Switch to', 'hide-admin-bar-based-on-user-roles' );
+		}
+
+		return $columns;
+	}
+
+	/**
+	 * Show a "Switch to" button for the users the current user may switch to, and a dash for the rest.
+	 *
+	 * @since 7.5.0
+	 * @param string $output  Column content so far.
+	 * @param string $column  Column name.
+	 * @param int    $user_id User in the row.
+	 * @return string
+	 */
+	public function render_column( $output, $column, $user_id ) {
+		if ( 'hab_switch_to' !== $column ) {
+			return $output;
+		}
+
+		$user = get_userdata( $user_id );
+		if ( ! $user || ! $this->can_switch_to( $user ) ) {
+			return '<span aria-hidden="true">&#8212;</span><span class="screen-reader-text">' . esc_html__( 'Not available', 'hide-admin-bar-based-on-user-roles' ) . '</span>';
+		}
+
+		/* translators: %s: user's display name. */
+		$label = sprintf( __( 'Switch to %s', 'hide-admin-bar-based-on-user-roles' ), $user->display_name );
+
+		return '<a class="button button-small" href="' . esc_url( $this->switch_to_url( $user ) ) . '" aria-label="' . esc_attr( $label ) . '">' . esc_html__( 'Switch to', 'hide-admin-bar-based-on-user-roles' ) . '</a>';
+	}
+
+	/**
+	 * Keep the "Switch to" column narrow.
+	 *
+	 * @since 7.5.0
+	 */
+	public function print_column_styles() {
+		echo '<style>.fixed .column-hab_switch_to { width: 7.5em; }</style>';
 	}
 
 	/**

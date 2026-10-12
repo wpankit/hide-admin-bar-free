@@ -34,7 +34,7 @@ $hab_values = $settings['switch_user'];
 			<?php
 			printf(
 				/* translators: %s: link to the Users screen. */
-				esc_html__( 'Once it’s on, hover over a user on the %s screen and choose “Switch to”.', 'hide-admin-bar-based-on-user-roles' ),
+				esc_html__( 'Once it’s on, use the “Switch to” button next to a user on the %s screen.', 'hide-admin-bar-based-on-user-roles' ),
 				'<a href="' . esc_url( admin_url( 'users.php' ) ) . '">' . esc_html__( 'Users', 'hide-admin-bar-based-on-user-roles' ) . '</a>'
 			);
 			?>

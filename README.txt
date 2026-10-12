@@ -129,7 +129,7 @@ Yes. On the Admin cleanup tab, turn on “Remove admin bar items”, pick a role
 Yes. On the Admin cleanup tab, turn on “Hide admin notices” and pick the roles. It hides every notice for those roles, including update reminders, so keep it off for the people who look after the site.
 
 = How can I check what a user sees? =
-On the Dashboard & login tab, turn on “Allow switching to users”. Then, on the Users screen, hover over a user and choose “Switch to”. A bar at the bottom of the screen shows who you're viewing as, with a link to switch back.
+On the Dashboard & login tab, turn on “Allow switching to users”. Then, on the Users screen, click the “Switch to” button next to a user. A bar at the bottom of the screen shows who you're viewing as, with a link to switch back.
 
 = I locked someone out of the dashboard. How do I undo it? =
 Add `define( 'HAB_DISABLE_MODULES', true );` to wp-config.php. It switches off everything on the Dashboard & login, Admin cleanup and Compatibility tabs and keeps your settings. Your admin bar rules keep working. Remove the line once you've fixed the settings.
