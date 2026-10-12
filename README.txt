@@ -1,6 +1,6 @@
 === Hide Admin Bar Based on User Roles – Disable the WordPress Toolbar by Role or Capability ===
 Contributors: ankitmaru, siapanchal
-Tags: hide admin bar, admin bar, toolbar, user roles, remove admin bar
+Tags: hide admin bar, admin bar, toolbar, dashboard access, remove admin bar
 Plugin URI: https://wordpress.org/plugins/hide-admin-bar-based-on-user-roles/
 Author: WPAnkit
 Author URI: https://wpankit.com/
@@ -11,13 +11,13 @@ Stable tag: 7.5.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Hide the WordPress admin bar for specific user roles or capabilities. Remove the toolbar for subscribers, customers & guests.
+Hide the WordPress admin bar by user role, block wp-admin access, redirect after login, and tidy the admin menu and notices for each role.
 
 == Description ==
 
-**Hide Admin Bar Based on User Roles** lets you choose who sees the WordPress admin bar (the toolbar) on the front end of your site.
+**Hide Admin Bar Based on User Roles** lets you choose who sees the WordPress admin bar (the toolbar) on the front end of your site, and who can open the dashboard.
 
-Remove it for subscribers, hide it from WooCommerce customers, turn it off for everyone, or target specific roles and capabilities, all from one settings page and without writing code.
+Remove the admin bar for subscribers, hide it from WooCommerce customers, turn it off for everyone, or target specific roles and capabilities. You can also keep chosen roles out of wp-admin, send each role to its own page after logging in, and tidy the admin menu, admin bar, notices and dashboard widgets for each role. All from one settings page, without writing code.
 
 The plugin is lightweight and works as soon as you activate it. Trusted on **20,000+ active WordPress sites**.
 
@@ -120,10 +120,10 @@ Yes. On the Dashboard & login tab, turn on “Redirect after login” and enter 
 Some plugins, such as BuddyPress, wpForo or WC Vendors, turn the admin bar back on. Go to the Compatibility tab and turn on Strict mode. It applies your admin bar rules once more, after every other plugin.
 
 = Can I hide admin menu items for a role? =
-Yes. On the Admin cleanup tab, turn on “Hide admin menu items”, pick a role and tick the items to hide. Hiding a menu tidies it but doesn't lock the screen; to keep a role out of wp-admin altogether, use Dashboard access. The Settings menu always stays, so you can get back to these settings.
+Yes. On the Admin cleanup tab, turn on “Hide admin menu items” and tick the items to hide in each role’s column. Hiding a menu tidies it but doesn't lock the screen; to keep a role out of wp-admin altogether, use Dashboard access. The Settings menu always stays, so you can get back to these settings.
 
 = Can I remove items from the admin bar instead of hiding the whole bar? =
-Yes. On the Admin cleanup tab, turn on “Remove admin bar items”, pick a role and tick items such as the WordPress logo, Comments or + New. It applies on your site and in the dashboard.
+Yes. On the Admin cleanup tab, turn on “Remove admin bar items” and, in each role’s column, tick items such as the WordPress logo, Comments or + New. It applies on your site and in the dashboard.
 
 = Can I hide admin notices for my clients? =
 Yes. On the Admin cleanup tab, turn on “Hide admin notices” and pick the roles. It hides every notice for those roles, including update reminders, so keep it off for the people who look after the site.
